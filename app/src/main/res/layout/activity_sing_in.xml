@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/blue"
+    tools:context=".Sing_inActivity">
+
+    <EditText
+        android:id="@+id/etisim"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/etstyle"
+        android:drawableLeft="@drawable/person"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/ad"
+        android:inputType="text"
+        android:maxLength="15"
+        android:singleLine="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etsoyisim"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/etstyle"
+        android:drawableLeft="@drawable/person"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/soyad"
+        android:inputType="text"
+        android:maxLength="15"
+        android:singleLine="true"
+        app:layout_constraintEnd_toEndOf="@+id/etisim"
+        app:layout_constraintStart_toStartOf="@+id/etisim"
+        app:layout_constraintTop_toBottomOf="@+id/etisim" />
+
+    <EditText
+        android:id="@+id/etemail"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/etstyle"
+        android:drawableLeft="@drawable/email_24"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/mail"
+        android:inputType="textEmailAddress"
+        android:maxLength="30"
+        android:singleLine="true"
+        app:layout_constraintEnd_toEndOf="@+id/etsoyisim"
+        app:layout_constraintStart_toStartOf="@+id/etsoyisim"
+        app:layout_constraintTop_toBottomOf="@+id/etsoyisim" />
+
+    <EditText
+        android:id="@+id/etpassword"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/etstyle"
+        android:ems="10"
+        android:hint="@string/sfr"
+        android:inputType="numberPassword"
+        android:maxLength="8"
+        android:gravity="center"
+        android:drawableLeft="@drawable/lock_24"
+        app:layout_constraintEnd_toEndOf="@+id/etemail"
+        app:layout_constraintStart_toStartOf="@+id/etemail"
+        app:layout_constraintTop_toBottomOf="@+id/etemail" />
+
+    <Button
+        android:id="@+id/btnkayit"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/btn"
+        android:singleLine="true"
+        android:text="@string/kayit_ol"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/etpassword"
+        app:layout_constraintStart_toStartOf="@+id/etpassword"
+        app:layout_constraintTop_toBottomOf="@+id/etpassword" />
+</androidx.constraintlayout.widget.ConstraintLayout>

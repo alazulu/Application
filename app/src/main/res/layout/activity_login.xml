@@ -55,4 +55,19 @@
         app:layout_constraintStart_toStartOf="@+id/etsifre"
         app:layout_constraintTop_toBottomOf="@+id/etsifre" />
 
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/btn"
+        android:text="@string/kayit_ol"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/etsifre"
+        app:layout_constraintStart_toStartOf="@+id/etsifre"
+        app:layout_constraintTop_toBottomOf="@+id/button" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

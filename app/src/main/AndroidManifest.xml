@@ -17,7 +17,7 @@
         android:theme="@style/Theme.Application"
         tools:targetApi="31">
         <activity
-            android:name=".apiActivity"
+            android:name=".Sing_inActivity"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"

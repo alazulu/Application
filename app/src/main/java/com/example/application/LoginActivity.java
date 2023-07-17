@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
 
-    Button btn;
+    Button btn,btn1;
     FirebaseAuth auth;
     FirebaseUser user;
     EditText mail;
@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
 
         auth=FirebaseAuth.getInstance();
         btn=findViewById(R.id.button);
+        btn1=findViewById(R.id.button2);
         mail=findViewById(R.id.etmail);
         sifre=findViewById(R.id.etsifre);
 
@@ -55,6 +56,14 @@ public class LoginActivity extends AppCompatActivity {
                 });
 
 
+            }
+        });
+
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, Sing_inActivity.class));
+                finish();
             }
         });
 

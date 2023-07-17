@@ -24,9 +24,6 @@ public class anasayfaFragment extends Fragment {
 
 
 
-
-
-
     }
 
 
@@ -36,15 +33,6 @@ public class anasayfaFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_anasayfa, container, false);
-        Button btn =v.findViewById(R.id.btn1);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(),apiActivity.class));
-            }
-        });
-
 
 
 

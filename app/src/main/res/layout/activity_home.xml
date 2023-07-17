@@ -11,9 +11,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/blue"
-        android:minHeight="0dp"
         android:theme="?attr/actionBarTheme"
+        android:background="@color/blue"
         app:menu="@menu/homemenu"
         app:title=" "/>
 

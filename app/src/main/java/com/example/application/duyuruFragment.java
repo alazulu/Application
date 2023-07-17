@@ -1,64 +1,128 @@
 package com.example.application;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link duyuruFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.example.application.models.News;
+import com.example.application.models.NewsAdapter;
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+
 public class duyuruFragment extends Fragment {
+    private NewsAdapter adapter;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public duyuruFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment duyuruFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static duyuruFragment newInstance(String param1, String param2) {
-        duyuruFragment fragment = new duyuruFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_duyuru, container, false);
+        View vd=inflater.inflate(R.layout.fragment_duyuru, container, false);
+        RecyclerView rcduyuruView=vd.findViewById(R.id.rcviewduyuru);
+        rcduyuruView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder().url("https://newsapi.org/v2/everything?q=bitcoin&apiKey=f76b5b9e663f47549f8fbbbbbcda027a").build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responsedata;
+                    responsedata = response.body().string();
+
+                    Gson gson=new Gson();
+                    News news=gson.fromJson(responsedata, News.class);
+
+                    List<String> data = new ArrayList<>();
+                    List<String> data1 = new ArrayList<>();
+                    List<String> imageurls = new ArrayList<>();
+                    List<String> url1 = new ArrayList<>();
+
+                    for (int i = 0; i < news.getArticles().size(); i++) {
+                        data.add(news.getArticles().get(i).getTitle().toString());
+                        if (news.getArticles().get(i).getUrlToImage()==null) {
+                            imageurls.add("https://sezeromer.com/wp-content/uploads/2018/04/error.jpg");
+                        } else {
+                            imageurls.add(news.getArticles().get(i).getUrlToImage().toString());
+                        }
+
+                        data1.add(news.getArticles().get(i).getContent().toString());
+                        if(news.getArticles().get(i).getUrl().toString()!=null) {
+                            url1.add(news.getArticles().get(i).getUrl().toString());
+                        }else {
+                            url1.add("https://sezeromer.com/wp-content/uploads/2018/04/error.jpg");
+                        }
+                    }
+
+                    List<Bitmap> images = new ArrayList<>();
+
+                    for(String url: imageurls){
+                        try {
+                            if (url != null) {
+                                Bitmap bitmap = Picasso.get().load(url).resize(100, 100).get();
+                                images.add(bitmap);
+                            } else {
+                                Bitmap placeholder = BitmapFactory.decodeResource(getResources(), R.drawable.error);
+                                images.add(placeholder);
+                            }
+                        }catch (Exception e){
+                            e.printStackTrace();
+                            Bitmap placeholder = BitmapFactory.decodeResource(getResources(), R.drawable.error);
+                            images.add(placeholder);
+                        }
+                    }
+                    Log.d("data",String.valueOf(data.size()));
+                    Log.d("data1",String.valueOf(data1.size()));
+                    Log.d("images",String.valueOf(images.size()));
+                    Log.d("url",String.valueOf(news.getArticles().size()));
+
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter = new NewsAdapter(data, data1, images,url1);
+                            rcduyuruView.setAdapter(adapter);
+
+                        }
+                    });
+
+                } else {
+                    // İstek başarısız oldu
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                // İstek başarısız oldu
+                Toast.makeText(getContext(),e.toString(),Toast.LENGTH_SHORT).show();
+            }
+        });
+        return vd;
     }
 }
