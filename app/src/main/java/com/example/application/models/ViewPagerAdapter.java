@@ -30,7 +30,9 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Gerekirse her bir sayfanın içeriğiyle burada ilgili işlemleri yapabilirsiniz.
+        NewsItem item= Items.get(position);
+
+        holder.bind(item);
     }
 
     @Override
