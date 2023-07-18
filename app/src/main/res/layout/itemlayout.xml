@@ -9,6 +9,7 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     android:layout_marginBottom="8dp"
+    android:elevation="10dp"
     android:clickable="true"
     android:focusable="true"
     android:onClick="onItemClick"
@@ -24,6 +25,9 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:src="@drawable/imgshape"
+        android:clipToOutline="true"
+        android:elevation="5dp"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <TextView
@@ -45,5 +49,6 @@
         android:layout_gravity="center"
         android:layout_marginStart="16dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp" />
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/black"/>
 </LinearLayout>

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.application.models.News;
 import com.example.application.models.NewsAdapter;
+import com.example.application.models.NewsItem;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -31,8 +32,8 @@ import okhttp3.Response;
 
 
 public class duyuruFragment extends Fragment {
-    private NewsAdapter adapter;
 
+    private NewsAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,9 +47,13 @@ public class duyuruFragment extends Fragment {
         View vd=inflater.inflate(R.layout.fragment_duyuru, container, false);
         RecyclerView rcduyuruView=vd.findViewById(R.id.rcviewduyuru);
         rcduyuruView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter=new NewsAdapter();
+        rcduyuruView.setAdapter(adapter);
+
+
 
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url("https://newsapi.org/v2/everything?q=bitcoin&apiKey=f76b5b9e663f47549f8fbbbbbcda027a").build();
+        Request request = new Request.Builder().url("https://newsapi.org/v2/everything?q=Hugh_Howey&apiKey=f76b5b9e663f47549f8fbbbbbcda027a").build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
@@ -60,57 +65,44 @@ public class duyuruFragment extends Fragment {
                     Gson gson=new Gson();
                     News news=gson.fromJson(responsedata, News.class);
 
-                    List<String> data = new ArrayList<>();
-                    List<String> data1 = new ArrayList<>();
-                    List<String> imageurls = new ArrayList<>();
-                    List<String> url1 = new ArrayList<>();
+
 
                     for (int i = 0; i < news.getArticles().size(); i++) {
-                        data.add(news.getArticles().get(i).getTitle().toString());
-                        if (news.getArticles().get(i).getUrlToImage()==null) {
-                            imageurls.add("https://sezeromer.com/wp-content/uploads/2018/04/error.jpg");
-                        } else {
-                            imageurls.add(news.getArticles().get(i).getUrlToImage().toString());
-                        }
+                        NewsItem item=new NewsItem();
+                        String imageurl=new String();
+                        Bitmap image;
 
-                        data1.add(news.getArticles().get(i).getContent().toString());
+                        item.setItemTitle(news.getArticles().get(i).getTitle().toString());
+                        item.setItemContent(news.getArticles().get(i).getContent().toString());
                         if(news.getArticles().get(i).getUrl().toString()!=null) {
-                            url1.add(news.getArticles().get(i).getUrl().toString());
+                            item.setItemUrl(news.getArticles().get(i).getUrl().toString());
                         }else {
-                            url1.add("https://sezeromer.com/wp-content/uploads/2018/04/error.jpg");
+                            item.setItemUrl("https://sezeromer.com/wp-content/uploads/2018/04/error.jpg");
                         }
-                    }
+                        imageurl=news.getArticles().get(i).getUrlToImage();
 
-                    List<Bitmap> images = new ArrayList<>();
-
-                    for(String url: imageurls){
+                        if (news.getArticles().get(i).getUrlToImage()==null) {
+                            imageurl="https://sezeromer.com/wp-content/uploads/2018/04/error.jpg";
+                        } else {
+                            imageurl=news.getArticles().get(i).getUrlToImage().toString();
+                        }
                         try {
-                            if (url != null) {
-                                Bitmap bitmap = Picasso.get().load(url).resize(100, 100).get();
-                                images.add(bitmap);
-                            } else {
-                                Bitmap placeholder = BitmapFactory.decodeResource(getResources(), R.drawable.error);
-                                images.add(placeholder);
+                            image = Picasso.get().load(imageurl).resize(100, 100).get();
+                            if(image==null){
+                                image = BitmapFactory.decodeResource(getResources(), R.drawable.error);
                             }
                         }catch (Exception e){
-                            e.printStackTrace();
-                            Bitmap placeholder = BitmapFactory.decodeResource(getResources(), R.drawable.error);
-                            images.add(placeholder);
+                            image = BitmapFactory.decodeResource(getResources(), R.drawable.error);
                         }
+                        item.setItemImage(image);
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.addNewsItem(item);
+                            }
+                        });
+
                     }
-                    Log.d("data",String.valueOf(data.size()));
-                    Log.d("data1",String.valueOf(data1.size()));
-                    Log.d("images",String.valueOf(images.size()));
-                    Log.d("url",String.valueOf(news.getArticles().size()));
-
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter = new NewsAdapter(data, data1, images,url1);
-                            rcduyuruView.setAdapter(adapter);
-
-                        }
-                    });
 
                 } else {
                     // İstek başarısız oldu
@@ -125,4 +117,7 @@ public class duyuruFragment extends Fragment {
         });
         return vd;
     }
+
+
+
 }

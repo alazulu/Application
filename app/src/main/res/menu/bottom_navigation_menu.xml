@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/nav_anasayfa" android:icon="@drawable/home_24" android:title="Anasayfa"/>
+    <item android:id="@+id/nav_duyuru" android:icon="@drawable/notifications_24" android:title="Duyurular"/>
+    <item android:id="@+id/nav_profil" android:icon="@drawable/person_24" android:title="Profil"/>
+</menu>
