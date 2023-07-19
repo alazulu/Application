@@ -42,7 +42,6 @@ public class NewsAdapter  extends RecyclerView.Adapter<NewsAdapter.NewsViewHolde
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
         NewsItem item= newsItems.get(position);
-
         holder.bind(item);
     }
 
@@ -71,7 +70,7 @@ public class NewsAdapter  extends RecyclerView.Adapter<NewsAdapter.NewsViewHolde
             tvicerik.setText(item.getItemContent().toString());
             tvbaslik.setText(item.getItemTitle().toString());
             ivImage.setImageBitmap(item.getItemImage());
-            String website=item.getItemUrl();
+            String website=item.getItemUrl().toString();
             itemlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

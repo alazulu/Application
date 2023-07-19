@@ -47,7 +47,7 @@ public class Sing_inActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
                                 user=FirebaseAuth.getInstance().getCurrentUser();
-                                UserProfileChangeRequest profileUpdates=new UserProfileChangeRequest.Builder().setDisplayName(etad.getText().toString()+" "+etsoyad.getText().toString()).build();
+                                UserProfileChangeRequest profileUpdates=new UserProfileChangeRequest.Builder().setDisplayName(etad.getText().toString().toUpperCase().trim()+" "+etsoyad.getText().toString().toUpperCase().trim()).build();
                                 user.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {

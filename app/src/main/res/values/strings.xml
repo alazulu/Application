@@ -11,4 +11,5 @@
     <string name="kayit_ol">KAYIT OL</string>
     <string name="ad">Ad</string>
     <string name="soyad">Soyad</string>
+    <string name="tel_mail">Telefon yada Email giriniz</string>
 </resources>

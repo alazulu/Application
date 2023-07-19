@@ -1,5 +1,6 @@
 package com.example.application;
 
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,7 +18,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class profilFragment extends Fragment {
 
-    TextView tv1;
+    TextView adsoyad,tel,mail;
+    ImageView ivprofil;
     FirebaseUser user;
 
     @Override
@@ -29,14 +32,25 @@ public class profilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v=inflater.inflate(R.layout.fragment_profil, container, false);
-        tv1=v.findViewById(R.id.tv1);
+
+        adsoyad=v.findViewById(R.id.tvadsoyad);
+        tel=v.findViewById(R.id.tvtel);
+        mail=v.findViewById(R.id.tvmail);
+        ivprofil=v.findViewById(R.id.ivprofil);
 
         user= FirebaseAuth.getInstance().getCurrentUser();
-        if(user!=null){
-            tv1.setText(user.getDisplayName().toString());}
-        else {
-            Toast.makeText(getActivity(),"Kullanıcı adı bulunamadı",Toast.LENGTH_SHORT).show();
+
+        if (user.getDisplayName()!=null){
+            adsoyad.setText(user.getDisplayName().toString());
         }
+        if(user.getPhoneNumber()!=null){
+            tel.setText(user.getPhoneNumber().toString());
+        }
+        if (user.getEmail()!=null){
+            mail.setText(user.getEmail().toString());
+        }
+        ivprofil.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profil));
+
 
 
         return v;

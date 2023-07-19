@@ -24,6 +24,7 @@ public class HomeActivity extends AppCompatActivity {
     FirebaseAuth auth;
     BottomNavigationView bnv;
     Toolbar toolbar;
+    Fragment aktifFragment;
 
 
     @Override
@@ -36,16 +37,15 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         bnv=findViewById(R.id.bottom_navigation);
         auth=FirebaseAuth.getInstance();
+        aktifFragment=new anasayfaFragment();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.home_container,new anasayfaFragment()).commit();
-        bnv.setSelectedItemId(R.id.nav_anasayfa);
+        getSupportFragmentManager().beginTransaction().replace(R.id.home_container,aktifFragment).commit();
 
         bnv.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment fr=null;
                 int id= item.getItemId();
-                Intent intent=getIntent();
 
                 if (id==R.id.nav_anasayfa){
                     fr=new anasayfaFragment();
@@ -54,18 +54,16 @@ public class HomeActivity extends AppCompatActivity {
                 } else if (id==R.id.nav_profil) {
                     fr=new profilFragment();
                 }
-                getSupportFragmentManager().beginTransaction().replace(R.id.home_container,fr).commit();
+
+                if(fr!=null) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.home_container, fr).commit();
+                aktifFragment=fr;
+                }
                 return true;
             }
         });
 
-
-
-
-
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

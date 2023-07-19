@@ -1,53 +1,92 @@
 package com.example.application.models;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.application.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.ViewHolder> {
+public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.PagerViewHolder> {
 
     private List<NewsItem> Items;
 
-    public ViewPagerAdapter(NewsItem item) {
+    public ViewPagerAdapter(){
+        Items=new ArrayList<>();
+    }
+
+    public void addPagerAdapter(NewsItem item) {
         Items.add(item);
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PagerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewpageritem, parent, false);
-        return new ViewHolder(view);
+        return new PagerViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PagerViewHolder holder, int position) {
         NewsItem item= Items.get(position);
-
         holder.bind(item);
     }
 
     @Override
     public int getItemCount() {
-        return pageLayouts.size();
+        return Items.size();
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public ViewHolder(@NonNull View itemView) {
+
+    public class PagerViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView tvicerik;
+        private TextView tvbaslik;
+        private ImageView ivImage;
+        private Button btnpager;
+
+
+        public PagerViewHolder(@NonNull View itemView){
             super(itemView);
+            tvicerik=itemView.findViewById(R.id.tvpager2);
+            tvbaslik=itemView.findViewById(R.id.tvpager);
+            ivImage=itemView.findViewById(R.id.ivpager);
+            btnpager=itemView.findViewById(R.id.btnpager);
         }
+
+        public void bind(NewsItem item){
+            tvicerik.setText(item.getItemContent().toString());
+            tvbaslik.setText(item.getItemTitle().toString());
+            ivImage.setImageBitmap(item.getItemImage());
+            String website=item.getItemUrl().toString();
+            btnpager.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openWebsite(v.getContext(), website);
+                }
+            });
+
+        }
+        private void openWebsite(Context context, String url) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            context.startActivity(intent);
+        }
+
+
     }
 }

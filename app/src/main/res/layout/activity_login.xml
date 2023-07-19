@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/orange"
+    android:background="@color/lightOrange"
     tools:context=".LoginActivity">
 
     <EditText
@@ -62,6 +62,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="16dp"
+
         android:background="@drawable/btn"
         android:text="@string/kayit_ol"
         android:textStyle="bold"

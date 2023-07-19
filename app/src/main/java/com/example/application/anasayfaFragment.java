@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.application.models.News;
+import com.example.application.models.NewsAdapter;
 import com.example.application.models.NewsItem;
 import com.example.application.models.ViewPagerAdapter;
 import com.google.gson.Gson;
@@ -54,7 +55,7 @@ public class anasayfaFragment extends Fragment {
         View va=inflater.inflate(R.layout.fragment_anasayfa, container, false);
             viewPager=va.findViewById(R.id.viewpager);
 
-            viewPagerAdapter=new ViewPagerAdapter(x,this);
+            viewPagerAdapter=new ViewPagerAdapter();
             viewPager.setAdapter(viewPagerAdapter);
 
         OkHttpClient client = new OkHttpClient();
@@ -92,7 +93,7 @@ public class anasayfaFragment extends Fragment {
                             imageurl=news.getArticles().get(i).getUrlToImage().toString();
                         }
                         try {
-                            image = Picasso.get().load(imageurl).resize(100, 100).get();
+                            image = Picasso.get().load(imageurl).resize(300, 300).get();
                             if(image==null){
                                 image = BitmapFactory.decodeResource(getResources(), R.drawable.error);
                             }
@@ -103,7 +104,7 @@ public class anasayfaFragment extends Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                adapter.addNewsItem(item);
+                                viewPagerAdapter.addPagerAdapter(item);
                             }
                         });
 
