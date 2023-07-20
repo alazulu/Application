@@ -12,4 +12,6 @@
     <string name="ad">Ad</string>
     <string name="soyad">Soyad</string>
     <string name="tel_mail">Telefon yada Email giriniz</string>
+    <string name="telstrng">5XX XXX XX XX</string>
+    <string name="btnvrfy">Doğrulama Kodu Gönder</string>
 </resources>

@@ -1,9 +1,14 @@
 package com.example.application;
 
+import static android.content.ContentValues.TAG;
+
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +26,7 @@ import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,11 +41,14 @@ public class duyuruFragment extends Fragment {
 
     private NewsAdapter adapter;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,7 +58,6 @@ public class duyuruFragment extends Fragment {
         rcduyuruView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter=new NewsAdapter();
         rcduyuruView.setAdapter(adapter);
-
 
 
         OkHttpClient client = new OkHttpClient();
@@ -119,7 +127,6 @@ public class duyuruFragment extends Fragment {
         });
         return vd;
     }
-
 
 
 }

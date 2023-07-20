@@ -11,17 +11,18 @@
         android:id="@+id/tvadsoyad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:gravity="right"
+        android:layout_marginEnd="8dp"
+        android:gravity="left"
         android:maxLines="2"
         android:text="******"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toEndOf="@+id/cv1"
         app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cv1"
         android:layout_width="wrap_content"
@@ -31,23 +32,23 @@
         app:cardCornerRadius="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-    <ImageView
-        android:id="@+id/ivprofil"
-        android:layout_width="150dp"
-        android:layout_height="150dp" />
+        <ImageView
+            android:id="@+id/ivprofil"
+            android:layout_width="150dp"
+            android:layout_height="150dp" />
     </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/tvmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
         android:singleLine="true"
         android:text="******"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toEndOf="@+id/cv1"
         app:layout_constraintTop_toBottomOf="@+id/tvadsoyad" />
 
@@ -55,14 +56,77 @@
         android:id="@+id/tvtel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
         android:singleLine="true"
         android:text="******"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cv1"
         app:layout_constraintTop_toBottomOf="@+id/tvmail" />
+
+    <Button
+        android:id="@+id/btnsfr"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="Şifre Değiştir"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cv1" />
+
+    <Button
+        android:id="@+id/btnmail"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Email Değiştir"
+        app:layout_constraintEnd_toEndOf="@+id/btnsfr"
+        app:layout_constraintStart_toStartOf="@+id/btnsfr"
+        app:layout_constraintTop_toBottomOf="@+id/btnsfr" />
+
+    <Button
+        android:id="@+id/btnonaytel"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Telefon Onayla"
+        app:layout_constraintEnd_toEndOf="@+id/btnsfr"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btnsfr"
+        app:layout_constraintTop_toBottomOf="@+id/btnonaymail" />
+
+    <Button
+        android:id="@+id/btnonaymail"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Email Onayla"
+        app:layout_constraintEnd_toEndOf="@+id/btnsfr"
+        app:layout_constraintStart_toStartOf="@+id/btnsfr"
+        app:layout_constraintTop_toBottomOf="@+id/btntel" />
+
+    <Button
+        android:id="@+id/btntel"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Telefon No Değiştir"
+        app:layout_constraintEnd_toEndOf="@+id/btnsfr"
+        app:layout_constraintStart_toStartOf="@+id/btnsfr"
+        app:layout_constraintTop_toBottomOf="@+id/btnmail" />
+
+    <EditText
+        android:id="@+id/editTextPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:maxLength="11"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="@+id/btnonaymail"
+        app:layout_constraintStart_toStartOf="@+id/btnonaymail"
+        app:layout_constraintTop_toBottomOf="@+id/btnonaymail" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
