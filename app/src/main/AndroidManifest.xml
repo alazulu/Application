@@ -17,6 +17,12 @@
         android:theme="@style/Theme.Application"
         tools:targetApi="31">
         <activity
+            android:name=".MaildgrActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SfrdgrActivity"
+            android:exported="false" />
+        <activity
             android:name=".TelkayitActivity"
             android:exported="false" />
         <activity

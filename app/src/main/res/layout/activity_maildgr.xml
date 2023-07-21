@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lightOrange"
+    tools:context=".MaildgrActivity">
+
+    <ImageView
+        android:id="@+id/ivmaildgr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/verify_24" />
+
+    <EditText
+        android:id="@+id/etmaildgrsfr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/etstyle"
+        android:ems="10"
+        android:gravity="center"
+        android:inputType="numberPassword"
+        android:maxLength="8"
+        android:hint="Şifrenizi Giriniz"
+        app:layout_constraintEnd_toEndOf="@+id/etmaildgr"
+        app:layout_constraintStart_toStartOf="@+id/etmaildgr"
+        app:layout_constraintTop_toBottomOf="@+id/etmaildgr" />
+
+    <EditText
+        android:id="@+id/etmaildgr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/etstyle"
+        android:ems="10"
+        android:hint="Yeni Emailinizi Giriniz"
+        android:gravity="center"
+        android:inputType="textEmailAddress"
+        android:maxLength="30"
+        app:layout_constraintEnd_toEndOf="@+id/ivmaildgr"
+        app:layout_constraintStart_toStartOf="@+id/ivmaildgr"
+        app:layout_constraintTop_toBottomOf="@+id/ivmaildgr" />
+
+    <Button
+        android:id="@+id/dgrmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/btn"
+        android:text="Email Değiştir"
+        app:layout_constraintEnd_toEndOf="@+id/etmaildgrsfr"
+        app:layout_constraintStart_toStartOf="@+id/etmaildgrsfr"
+        app:layout_constraintTop_toBottomOf="@+id/etmaildgrsfr" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

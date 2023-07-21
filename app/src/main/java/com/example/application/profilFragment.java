@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
@@ -17,12 +18,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -68,6 +72,20 @@ public class profilFragment extends Fragment {
             mail.setText(user.getEmail().toString());
         }
 
+        btnsfr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(),SfrdgrActivity.class));
+            }
+        });
+
+        btnmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), MaildgrActivity.class));
+            }
+        });
+
         if(user.getPhotoUrl()==null) {
             ivprofil.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profil));
         }else {
@@ -93,7 +111,8 @@ public class profilFragment extends Fragment {
             });
         }
 
-        if(user.getPhoneNumber()==""){
+        if( user.getPhoneNumber().equals("") || user.getPhoneNumber()==null ){
+            Log.d("TAG", user.getPhoneNumber().toString());
             btntel.setText("Telefon Kaydet");
             btnonaytel.setVisibility(View.INVISIBLE);
             btntel.setOnClickListener(new View.OnClickListener() {
@@ -104,11 +123,33 @@ public class profilFragment extends Fragment {
                 }
             });
         }else {
+            Log.d("TG", user.getPhoneNumber().toString());
             tel.setText(user.getPhoneNumber().toString());
 
         }
 
+        if (!user.isEmailVerified()){
 
+            btnonaymail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(getActivity(),"Onay maili Gönderildi.",Toast.LENGTH_SHORT).show();
+                                btnonaymail.setVisibility(View.INVISIBLE);
+                            }else {
+                                Toast.makeText(getActivity(),"Bir sorun oluştu.",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                }
+            });
+        }else {
+            btnonaymail.setVisibility(View.INVISIBLE);
+        }
 
 
         return v;

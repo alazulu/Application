@@ -116,17 +116,7 @@
         app:layout_constraintStart_toStartOf="@+id/btnsfr"
         app:layout_constraintTop_toBottomOf="@+id/btnmail" />
 
-    <EditText
-        android:id="@+id/editTextPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:maxLength="11"
-        android:inputType="phone"
-        app:layout_constraintEnd_toEndOf="@+id/btnonaymail"
-        app:layout_constraintStart_toStartOf="@+id/btnonaymail"
-        app:layout_constraintTop_toBottomOf="@+id/btnonaymail" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
