@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:orderInCategory="2"
         android:id="@+id/cikis"
-        android:title="ÇIKIŞ"
+        android:title="@string/cks"
         android:icon="@drawable/exit_24"
         app:showAsAction="always"/>
     <item android:orderInCategory="1"
-        android:id="@+id/ayarlar"
-        android:title="AYARLAR"
-        android:icon="@drawable/settings_24"
+        android:id="@+id/iletisim"
+        android:title="@string/iletisim"
+        android:icon="@drawable/help_24"
         app:showAsAction="always"/>
 
 </menu>

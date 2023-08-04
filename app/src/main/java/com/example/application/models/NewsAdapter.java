@@ -4,6 +4,7 @@ package com.example.application.models;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.application.R;
 import com.example.application.models.NewsItem;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ import java.util.List;
 public class NewsAdapter  extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
 
     private List<NewsItem> newsItems;
+    private int visibleItemCountThreshold = 5;
 
     public NewsAdapter(){
         newsItems=new ArrayList<>();
@@ -31,6 +35,7 @@ public class NewsAdapter  extends RecyclerView.Adapter<NewsAdapter.NewsViewHolde
         newsItems.add(item);
         notifyDataSetChanged();
     }
+
 
     @NonNull
     @Override
@@ -69,7 +74,10 @@ public class NewsAdapter  extends RecyclerView.Adapter<NewsAdapter.NewsViewHolde
         public void bind(NewsItem item){
             tvicerik.setText(item.getItemContent().toString());
             tvbaslik.setText(item.getItemTitle().toString());
-            ivImage.setImageBitmap(item.getItemImage());
+            String imageurl=item.getItemImageurl();
+            Context context=ivImage.getContext();
+            PicassoCache.getPicassoInstance(context).load(imageurl).error(R.drawable.error).resize(200,200).into(ivImage);
+
             String website=item.getItemUrl().toString();
             itemlay.setOnClickListener(new View.OnClickListener() {
                 @Override

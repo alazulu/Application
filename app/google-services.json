@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "705933280145",
+    "firebase_url": "https://deneme-295ac-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "deneme-295ac",
     "storage_bucket": "deneme-295ac.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "705933280145-6mqlns1a7n86s86ebiihdpdknua7gd11.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.application",
+            "certificate_hash": "715606a6b93971ef4295b8d0ff1cac932f194a78"
+          }
+        },
         {
           "client_id": "705933280145-bvf8eaq6r86fb9gq12sl61h43rrifnog.apps.googleusercontent.com",
           "client_type": 3

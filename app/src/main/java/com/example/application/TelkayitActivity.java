@@ -19,27 +19,20 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
-
 import java.util.concurrent.TimeUnit;
 
 public class TelkayitActivity extends AppCompatActivity {
 
-    private Button btnverify,btnsendcode;
+    private Button btnverify, btnsendcode;
     private EditText etverify;
     private FirebaseAuth auth;
-    private FirebaseUser user,userd;
-    DatabaseReference db;
-    private String mVerification,uid;
+    private FirebaseUser user;
+    private String mVerification;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,111 +40,93 @@ public class TelkayitActivity extends AppCompatActivity {
         setContentView(R.layout.activity_telkayit);
 
         auth = FirebaseAuth.getInstance();
-        userd=auth.getCurrentUser();
-        uid=auth.getCurrentUser().getUid();
-        db=FirebaseDatabase.getInstance().getReference("users").child(uid);
-        //btnverify = findViewById(R.id.btnverify);
-        btnsendcode=findViewById(R.id.btnsendcode);
+        user = auth.getCurrentUser();
+        btnverify = findViewById(R.id.btnverify);
+        btnsendcode = findViewById(R.id.btnsendcode);
         etverify = findViewById(R.id.etverify);
-        String deneme=String.valueOf(db);
-        Log.e("user", String.valueOf( userd.isEmailVerified()));
         btnsendcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String phoneNo ="+90"+ etverify.getText().toString();
-                if (phoneNo.length() == 13) {
-                    db.child("tel").setValue(phoneNo).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                Toast.makeText(TelkayitActivity.this,"Telefon no eklendi",Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(TelkayitActivity.this,HomeActivity.class));
-                                finish();
-                            }else {
-                                Toast.makeText(TelkayitActivity.this,"Bir hata oluştu",Toast.LENGTH_SHORT).show();
-                                etverify.setText("");
-                            }
-                        }
-                    });
 
-                    /*sendtel(telno);
+                String phoneNo = "+90" + etverify.getText().toString();
+
+                if (phoneNo.length() == 13) {
+                    sendtel(phoneNo);
                     etverify.setText("");
-                    etverify.setHint("Doğrulama Kodunu Giriniz");
+                    etverify.setHint(getString(R.string.toast25));
                     etverify.setFilters(new InputFilter[]{new InputFilter.LengthFilter(6)});
-                    btnverify.setVisibility(View.INVISIBLE);
-                    btnsendcode.setVisibility(View.VISIBLE);*/
+                    btnverify.setVisibility(View.VISIBLE);
+                    btnsendcode.setVisibility(View.INVISIBLE);
                 } else {
-                    Toast.makeText(TelkayitActivity.this, "Geçerli bir telefon numarası giriniz", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TelkayitActivity.this, getString(R.string.toast27), Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
-    }
-       /* btnverify.setOnClickListener(new View.OnClickListener() {
+
+        btnverify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String verifycode= etverify.getText().toString();
-                if (verifycode.length()==6){
+                String verifycode = etverify.getText().toString();
+                if (verifycode.length() == 6) {
                     sendcode(verifycode);
-                }else {
-                    Toast.makeText(TelkayitActivity.this,"Geçerli bir doğrulama kodu giriniz",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(TelkayitActivity.this, getString(R.string.toast28), Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
-
-
-
-
-    private void sendtel(String tel){
-
-        PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks=new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            @Override
-            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                Log.e("hata", "onVerificationCompleted");
-                Toast.makeText(TelkayitActivity.this,"Doğrulama Tamamlandı",Toast.LENGTH_LONG).show();
-
-            }
-
-            @Override
-            public void onVerificationFailed(@NonNull FirebaseException e) {
-                Log.e("hata","Verification Error:"+e.getMessage());
-                Toast.makeText(TelkayitActivity.this,"Doğrulama Başarısız:"+e.getMessage(),Toast.LENGTH_LONG).show();
-
-
-            }
-
-
-            public void onCodeSend(@NonNull String verificationId,@NonNull PhoneAuthProvider.ForceResendingToken token){
-                Log.e("hata","Kod Gönderildi");
-                mVerification=verificationId;
-            }
-        };
-
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                tel,
-                2,
-                TimeUnit.MINUTES,
-                this,
-                mCallbacks);
     }
 
-    private void sendcode(String VerifyCode){
-        PhoneAuthCredential credential=PhoneAuthProvider.getCredential(mVerification,VerifyCode);
 
-        auth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()){
-                    Log.e("hata","Verification Success");
-                    Toast.makeText(TelkayitActivity.this,"Kod Başarıyla Doğrulandı :)",Toast.LENGTH_LONG).show();
-                    startActivity(new Intent(TelkayitActivity.this,LoginActivity.class));
-                } else if (task.getException()instanceof FirebaseAuthInvalidCredentialsException) {
-                    Log.e("hata","Verification Failed, Invalid credentials");
-                    Toast.makeText(TelkayitActivity.this,"Hatalı Doğrulama Kodu!",Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(TelkayitActivity.this,"Beklenmedik bir hata oluştu",Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-    }*/
+    private void sendtel(String tel) {
 
+                PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                    @Override
+                    public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                        Toast.makeText(TelkayitActivity.this, getString(R.string.toast29), Toast.LENGTH_LONG).show();
+
+                    }
+
+                    @Override
+                    public void onVerificationFailed(@NonNull FirebaseException e) {
+                        Log.e("hata", "Verification Error:" + e.getMessage());
+                        Toast.makeText(TelkayitActivity.this, getString(R.string.toast30) + e.getMessage(), Toast.LENGTH_LONG).show();
+
+                    }
+
+
+                    public void onCodeSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
+
+                        mVerification = verificationId;
+                    }
+                };
+
+        PhoneAuthOptions options = PhoneAuthOptions.newBuilder(auth).setPhoneNumber(tel).setTimeout(60L, TimeUnit.SECONDS).setCallbacks(mCallbacks).build();
+
+        PhoneAuthProvider.verifyPhoneNumber(options);
+
+    }
+
+    private void sendcode(String VerifyCode) {
+                PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerification, VerifyCode);
+
+                user.linkWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        if (task.isSuccessful()) {
+                            Toast.makeText(TelkayitActivity.this, getString(R.string.toast31), Toast.LENGTH_LONG).show();
+                            startActivity(new Intent(TelkayitActivity.this, LoginActivity.class));
+                            finish();
+                        } else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                            Toast.makeText(TelkayitActivity.this, getString(R.string.toast32), Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(TelkayitActivity.this, getString(R.string.toast33), Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                });
+
+    }
 }

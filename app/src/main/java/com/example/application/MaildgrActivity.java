@@ -43,11 +43,11 @@ public class MaildgrActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             user.verifyBeforeUpdateEmail(etmaildgr.getText().toString());
-                            Toast.makeText(MaildgrActivity.this, "Mail adresiniz mailinize gelen doğrulama linkini onayladıktan sonra değişecektir", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MaildgrActivity.this, getString(R.string.toast8), Toast.LENGTH_LONG).show();
                             startActivity(new Intent(MaildgrActivity.this,LoginActivity.class));
                             finish();
                         } else {
-                            Toast.makeText(MaildgrActivity.this, "İşlem Başarısız", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MaildgrActivity.this, getString(R.string.toast9), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -1,5 +1,7 @@
 package com.example.application;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -38,7 +40,7 @@ public class profilFragment extends Fragment {
     TextView adsoyad,tel,mail;
     ImageView ivprofil;
     FirebaseUser user;
-    Button btnsfr,btnmail,btntel,btnonaytel,btnonaymail;
+    Button btnsfr,btnmail,btntel,btnonaymail,btndelete;
 
 
     @Override
@@ -60,7 +62,7 @@ public class profilFragment extends Fragment {
         btntel=v.findViewById(R.id.btntel);
         btnsfr=v.findViewById(R.id.btnsfr);
         btnonaymail=v.findViewById(R.id.btnonaymail);
-        btnonaytel=v.findViewById(R.id.btnonaytel);
+        btndelete=v.findViewById(R.id.btndelete);
 
         user= FirebaseAuth.getInstance().getCurrentUser();
 
@@ -106,15 +108,24 @@ public class profilFragment extends Fragment {
             btnonaymail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(getActivity(),getString(R.string.toast10),Toast.LENGTH_SHORT).show();
+                                btnonaymail.setVisibility(View.INVISIBLE);
+                            }else {
+                                Toast.makeText(getActivity(),getString(R.string.toast11),Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
             });
         }
 
-        if( user.getPhoneNumber().equals("") || user.getPhoneNumber()==null ){
+        if( user.getPhoneNumber().equals("") || user.getPhoneNumber() == null ){
             Log.d("TAG", user.getPhoneNumber().toString());
-            btntel.setText("Telefon Kaydet");
-            btnonaytel.setVisibility(View.INVISIBLE);
+            btntel.setText(getString(R.string.toast12));
             btntel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -123,33 +134,49 @@ public class profilFragment extends Fragment {
                 }
             });
         }else {
-            Log.d("TG", user.getPhoneNumber().toString());
             tel.setText(user.getPhoneNumber().toString());
-
-        }
-
-        if (!user.isEmailVerified()){
-
-            btnonaymail.setOnClickListener(new View.OnClickListener() {
+            btntel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()){
-                                Toast.makeText(getActivity(),"Onay maili Gönderildi.",Toast.LENGTH_SHORT).show();
-                                btnonaymail.setVisibility(View.INVISIBLE);
-                            }else {
-                                Toast.makeText(getActivity(),"Bir sorun oluştu.",Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-
+                    startActivity(new Intent(getActivity(),TeldgrActivity.class));
                 }
             });
-        }else {
-            btnonaymail.setVisibility(View.INVISIBLE);
+
         }
+
+
+
+        btndelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alert=new AlertDialog.Builder(getContext());
+                alert.setTitle(getString(R.string.hsbsl));
+                alert.setMessage(getString(R.string.toast13));
+                alert.setPositiveButton(getString(R.string.hsbsl),new DialogInterface.OnClickListener(){
+                    public  void onClick(DialogInterface dialog,int arg1){
+                        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    Toast.makeText(getContext(),getString(R.string.toast14),Toast.LENGTH_LONG).show();
+                                }else {
+                                    Toast.makeText(getContext(),getString(R.string.toast15),Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    }
+                });
+                alert.setNegativeButton(getString(R.string.toast16), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                alert.setCancelable(true);
+
+                alert.show();
+            }
+        });
 
 
         return v;

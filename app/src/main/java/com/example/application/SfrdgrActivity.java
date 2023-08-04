@@ -44,16 +44,16 @@ public class SfrdgrActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
                                 user.updatePassword(ysfr.getText().toString());
-                                Toast.makeText(SfrdgrActivity.this, "Şifre Başarı ile Değiştirildi", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SfrdgrActivity.this, getString(R.string.toast17), Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(SfrdgrActivity.this, LoginActivity.class));
                                 finish();
                             } else {
-                                Toast.makeText(SfrdgrActivity.this, "Eski şifreniz yanlış", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SfrdgrActivity.this, getString(R.string.toast18), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
                 }else {
-                    Toast.makeText(SfrdgrActivity.this, "Geçerli bir şifre giriniz", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SfrdgrActivity.this, getString(R.string.toast19), Toast.LENGTH_SHORT).show();
                 }
             }
         });

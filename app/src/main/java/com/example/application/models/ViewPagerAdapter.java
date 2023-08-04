@@ -72,7 +72,9 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.Page
         public void bind(NewsItem item){
             tvicerik.setText(item.getItemContent().toString());
             tvbaslik.setText(item.getItemTitle().toString());
-            ivImage.setImageBitmap(item.getItemImage());
+            String imageurl=item.getItemImageurl().toString();
+            Context context=ivImage.getContext();
+            PicassoCache.getPicassoInstance(context).load(imageurl).error(R.drawable.error).resize(300,300).into(ivImage);
             String website=item.getItemUrl().toString();
             btnpager.setOnClickListener(new View.OnClickListener() {
                 @Override

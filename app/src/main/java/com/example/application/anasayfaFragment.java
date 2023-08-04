@@ -1,5 +1,6 @@
 package com.example.application;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -59,9 +60,9 @@ public class anasayfaFragment extends Fragment {
             viewPager.setAdapter(viewPagerAdapter);
 
         OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder().url("https://newsapi.org/v2/everything?q=Hugh_Howey&apiKey=f76b5b9e663f47549f8fbbbbbcda027a").build();
+        Request request = new Request.Builder().url("https://newsapi.org/v2/everything?q=space races&apiKey=f76b5b9e663f47549f8fbbbbbcda027a").build();
 
-        client.newCall(request).enqueue(new Callback() {
+       client.newCall(request).enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
@@ -73,7 +74,7 @@ public class anasayfaFragment extends Fragment {
 
 
 
-                    for (int i = 0; i < news.getArticles().size(); i++) {
+                  for (int i = 0; i < news.getArticles().size(); i++) {
                         NewsItem item=new NewsItem();
                         String imageurl=new String();
                         Bitmap image;
@@ -92,21 +93,17 @@ public class anasayfaFragment extends Fragment {
                         } else {
                             imageurl=news.getArticles().get(i).getUrlToImage().toString();
                         }
-                        try {
-                            image = Picasso.get().load(imageurl).resize(300, 300).get();
-                            if(image==null){
-                                image = BitmapFactory.decodeResource(getResources(), R.drawable.error);
-                            }
-                        }catch (Exception e){
-                            image = BitmapFactory.decodeResource(getResources(), R.drawable.error);
-                        }
-                        item.setItemImage(image);
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                viewPagerAdapter.addPagerAdapter(item);
-                            }
-                        });
+
+                        item.setItemImageurl(imageurl);
+                      Activity activity = getActivity();
+                      if (activity != null) {
+                          activity.runOnUiThread(new Runnable() {
+                              @Override
+                              public void run() {
+                                  viewPagerAdapter.addPagerAdapter(item);
+                              }
+                          });
+                      }
 
                     }
 

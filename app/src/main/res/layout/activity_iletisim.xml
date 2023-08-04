@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pages"
+    tools:context=".IletisimActivity">
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rviletisim"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></androidx.recyclerview.widget.RecyclerView>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/bzyzn"
+        android:textColor="@color/orange"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/rviletisim"
+        app:layout_constraintTop_toBottomOf="@+id/rviletisim"></TextView>
+
+    <EditText
+        android:id="@+id/ilname"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/etstyle"
+        android:ems="10"
+        android:gravity="center"
+        android:layout_marginHorizontal="36dp"
+        android:hint="@string/adin"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/rviletisim"
+        app:layout_constraintStart_toStartOf="@+id/rviletisim"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <EditText
+        android:id="@+id/ilmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/etstyle"
+        android:ems="10"
+        android:gravity="center"
+        android:layout_marginHorizontal="36dp"
+        android:hint="@string/mailadres"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="@+id/ilname"
+        app:layout_constraintStart_toStartOf="@+id/ilname"
+        app:layout_constraintTop_toBottomOf="@+id/ilname" />
+
+    <EditText
+        android:id="@+id/iltelefon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/etstyle"
+        android:ems="10"
+        android:gravity="center"
+        android:layout_marginHorizontal="36dp"
+        android:hint="@string/telib"
+        android:inputType="phone"
+        app:layout_constraintEnd_toEndOf="@+id/ilmail"
+        app:layout_constraintStart_toStartOf="@+id/ilmail"
+        app:layout_constraintTop_toBottomOf="@+id/ilmail" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iltelefon">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/ilileti"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/etstyle"
+            android:hint="@string/ileti" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/ilbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/btn"
+        android:text="@string/gndr"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/iltelefon"
+        app:layout_constraintStart_toStartOf="@+id/iltelefon"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout"></Button>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

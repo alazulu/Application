@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 public class NewsItem {
     private String title;
     private String content;
-    private Bitmap image;
+    private String imageurl;
     private String url;
 
 
@@ -23,11 +23,11 @@ public class NewsItem {
         return content;
     }
 
-    public void setItemImage(Bitmap image) {
-        this.image = image;
+    public void setItemImageurl(String imageurl) {
+        this.imageurl = imageurl;
     }
-    public Bitmap getItemImage() {
-        return image;
+    public String getItemImageurl() {
+        return imageurl;
     }
 
     public void setItemUrl(String url) {
