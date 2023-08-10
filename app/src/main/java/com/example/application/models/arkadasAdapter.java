@@ -1,10 +1,7 @@
 package com.example.application.models;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +10,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.application.IletisimActivity;
 import com.example.application.R;
 import com.example.application.mesajActivity;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -27,7 +21,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class arkadasAdapter extends RecyclerView.Adapter<arkadasAdapter.arkadasViewHolder> {
@@ -70,22 +63,24 @@ public class arkadasAdapter extends RecyclerView.Adapter<arkadasAdapter.arkadasV
         private TextView ara_ad, ara_time;
         private ImageView ara_iv;
         private Button ara_btn;
+        Context context;
 
         public arkadasViewHolder(@NonNull View itemView) {
             super(itemView);
+            context=itemView.getContext();
             ara_btn = itemView.findViewById(R.id.btn_ekle);
             ara_ad = itemView.findViewById(R.id.ara_ad);
             ara_iv = itemView.findViewById(R.id.iv_ara);
             ara_time = itemView.findViewById(R.id.ara_time);
-            ara_btn.setText("Mesaj at");
+            ara_btn.setText(context.getString(R.string.msjat));
 
         }
 
         public void bind(DbUser user) {
             ara_ad.setText(user.getUserIsim() + " " + user.getUserSoyisim());
             String url = user.getUserImageurl();
-            Context context = ara_iv.getContext();
-            PicassoCache.getPicassoInstance(context).load(url).error(R.drawable.error).resize(200, 200).into(ara_iv);
+            Context c = ara_iv.getContext();
+            PicassoCache.getPicassoInstance(c).load(url).error(R.drawable.error).resize(200, 200).into(ara_iv);
 
 
 

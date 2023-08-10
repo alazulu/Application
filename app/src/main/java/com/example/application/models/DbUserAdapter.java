@@ -78,7 +78,7 @@ public class DbUserAdapter extends RecyclerView.Adapter<DbUserAdapter.DbUserView
             String uid= currentUser.getUid();
             String userid= user.getUseruserId();
             if (user.getUserIstek()==0){
-                ara_btn.setText("İstek Gönderildi");
+                ara_btn.setText(R.string.toast36);
                 ara_btn.setBackgroundColor(R.color.grey3);
             }else {
                 ara_btn.setClickable(false);
@@ -88,7 +88,6 @@ public class DbUserAdapter extends RecyclerView.Adapter<DbUserAdapter.DbUserView
 
                 ara_time.setText(cm.simpledateformat(user.getUserZaman()));
             }
-
 
             ara_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -101,27 +100,14 @@ public class DbUserAdapter extends RecyclerView.Adapter<DbUserAdapter.DbUserView
                     userdb.child(userid).child("istek").child(uid).setValue(istek).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            ara_btn.setText("İstek Gönderildi");
+                            ara_btn.setText(R.string.toast36);
                             ara_btn.setClickable(false);
                             ara_btn.setBackgroundColor(R.color.grey3);
                             ara_time.setText(cm.simpledateformat(System.currentTimeMillis()));
                         }
                     });
-
-
-
                 }
             });
-
-
-
         }
-
-
     }
-
-
-
-
-
 }

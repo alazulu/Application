@@ -4,6 +4,6 @@
         <item android:id="@+id/nav_arkadas" android:icon="@drawable/friends_24" android:title="@string/arkadas"/>
         <item android:id="@+id/nav_favori" android:icon="@drawable/favori_24" android:title="@string/favori" />
         <item android:id="@+id/nav_ara" android:icon="@drawable/search_24" android:title="@string/kul_ara"/>
-        <item android:id="@+id/nav_mesaj" android:icon="@drawable/group_24" android:title="@string/msj"/>
+        <item android:id="@+id/nav_mesaj" android:icon="@drawable/group_24" android:title="@string/shbt"/>
     </group>
 </menu>

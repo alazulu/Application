@@ -1,7 +1,6 @@
 package com.example.application.models;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 public class DbUser implements Serializable {
     private String isim;

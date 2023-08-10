@@ -3,8 +3,6 @@ package com.example.application.models;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,11 +11,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.application.R;
-import com.example.application.models.NewsItem;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +35,7 @@ public class NewsAdapter  extends RecyclerView.Adapter<NewsAdapter.NewsViewHolde
     @NonNull
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.itemlayout,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.layoutitem,parent,false);
         return new NewsViewHolder(view);
     }
 

@@ -70,4 +70,25 @@
     <string name="toast31">Kod Başarıyla Doğrulandı</string>
     <string name="toast32">Hatalı Doğrulama Kodu!</string>
     <string name="toast33">Beklenmedik bir hata oluştu</string>
+    <string name="kul_ara">Kullanıcıları Ara</string>
+    <string name="toast34">Selected Language: English</string>
+    <string name="ara_kullanici">Kullanıcının Adı</string>
+    <string name="ara">Ara</string>
+    <string name="ara_istek">İstek Gönder</string>
+    <string name="kbl">Kabul et</string>
+    <string name="rd">Reddet</string>
+    <string name="stk">İstekler</string>
+    <string name="grup_kur">Grup Kur</string>
+    <string name="bldrm">Bildirimler</string>
+    <string name="msj">Mesajlar</string>
+    <string name="skip">Atla</string>
+    <string name="splash1">Paylaşımları Görün: \nArkadaşlarınızın en son paylaşımlarını ve güncellemelerini tek bir yerde görüntüleyin. Onların hayatındaki gelişmeleri kaçırmayın.</string>
+    <string name="splash2">Etkinlikleri Takip Edin: \nArkadaşlarınızın düzenlediği etkinlikleri görüntüleyin ve kaçırmamak için takip edin. Onlarla birlikte keyifli zaman geçirin.</string>
+    <string name="splash3">Mesajlaşma Kolaylığı: \nArkadaşlarınıza kolayca mesaj gönderin ve iletişim halinde kalın. Yeni anılarınızı paylaşın ve iletişimde kalın.</string>
+    <string name="msjat">Mesaj at</string>
+    <string name="shbt">Sohbetler</string>
+    <string name="toast35">Fotoğraf başarıyla değiştirildi</string>
+    <string name="toast36">İstek Gönderildi</string>
+    <string name="bldmyk">Gösterilecek Bildirim Yok</string>
+
 </resources>

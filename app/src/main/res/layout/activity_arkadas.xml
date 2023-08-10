@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:menu="@menu/homemenu"
-        app:title="Arkadaşlar"
+        app:title="@string/arkadas"
         app:titleTextColor="@color/white" />
 
 

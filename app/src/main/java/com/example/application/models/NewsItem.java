@@ -1,7 +1,5 @@
 package com.example.application.models;
 
-import android.graphics.Bitmap;
-
 public class NewsItem {
     private String title;
     private String content;

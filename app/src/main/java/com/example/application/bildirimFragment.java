@@ -7,17 +7,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.application.models.DbUser;
-import com.example.application.models.News;
-import com.example.application.models.NewsAdapter;
-import com.example.application.models.NewsItem;
 import com.example.application.models.istekAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -26,16 +21,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.util.HashMap;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 
 public class bildirimFragment extends Fragment {
@@ -86,11 +71,14 @@ public class bildirimFragment extends Fragment {
                             dbUser.setUserIsim(snapshot.child("ad").getValue(String.class));
                             dbUser.setUserSoyisim(snapshot.child("soyad").getValue(String.class));
                             dbUser.setUserTel(snapshot.child("tel").getValue(String.class));
+                            adapter.notifyDataSetChanged();
                             if(dbUser.getUserIstek()==0){
                                 adapter.addistekItem(dbUser);
                             }
                             if(adapter.getItemCount()==0){
                                 tvbildirim.setVisibility(View.VISIBLE);
+                            }else {
+                                tvbildirim.setVisibility(View.INVISIBLE);
                             }
 
                         }

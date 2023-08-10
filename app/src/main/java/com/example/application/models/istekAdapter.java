@@ -1,7 +1,6 @@
 package com.example.application.models;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.application.HomeActivity;
 import com.example.application.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -22,12 +20,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class istekAdapter extends RecyclerView.Adapter<istekAdapter.istekViewHolder> {
 
-    private List<DbUser> dbUsers;
+    private static List<DbUser> dbUsers;
     static FirebaseAuth auth=FirebaseAuth.getInstance();
     static FirebaseUser currentUser=auth.getCurrentUser();
     static DatabaseReference userdb= FirebaseDatabase.getInstance().getReference("users");
@@ -36,6 +33,11 @@ public class istekAdapter extends RecyclerView.Adapter<istekAdapter.istekViewHol
 
     public void addistekItem(DbUser user){
         dbUsers.add(user);
+        notifyDataSetChanged();
+    }
+
+    public void remove(DbUser user){
+        dbUsers.remove(user);
         notifyDataSetChanged();
     }
 
@@ -57,7 +59,7 @@ public class istekAdapter extends RecyclerView.Adapter<istekAdapter.istekViewHol
     @Override
     public int getItemCount(){return dbUsers.size();}
 
-    public static class istekViewHolder extends RecyclerView.ViewHolder{
+    public class istekViewHolder extends RecyclerView.ViewHolder{
         private TextView istek_ad;
         private ImageView istek_iv;
         private Button istek_kbl,istek_red;
@@ -80,7 +82,6 @@ public class istekAdapter extends RecyclerView.Adapter<istekAdapter.istekViewHol
             istek_kbl.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.e("sdfv",user.getUseruserId()+","+currentUser.toString());
                     userdb.child(currentUser.getUid()).child("arkadaslar").child(user.getUseruserId()).setValue(" ").addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
@@ -92,6 +93,7 @@ public class istekAdapter extends RecyclerView.Adapter<istekAdapter.istekViewHol
                                         public void onSuccess(Void unused) {
                                             Toast.makeText(itemView.getContext(), user.getUserIsim()+" ile arkadaş oldunuz",Toast.LENGTH_LONG).show();
                                             istek_kbl.setClickable(false);
+
                                         }
                                     });
                                 }
@@ -108,6 +110,7 @@ public class istekAdapter extends RecyclerView.Adapter<istekAdapter.istekViewHol
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(itemView.getContext(), user.getUserIsim()+"'in arkadaşlık isteğini reddettiniz",Toast.LENGTH_LONG).show();
+
                         }
                     });
 
@@ -120,8 +123,6 @@ public class istekAdapter extends RecyclerView.Adapter<istekAdapter.istekViewHol
 
 
     }
-
-
 
 
 

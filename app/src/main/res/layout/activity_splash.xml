@@ -6,11 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".SplashActivity">
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpagersplash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/lightOrange"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" >
+    </androidx.viewpager2.widget.ViewPager2>
+
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/btnsplash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:background="@color/transparan"
+        android:drawableRight="@drawable/doublearrow_24"
+        android:text="@string/skip"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

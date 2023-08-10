@@ -10,6 +10,9 @@
     <color name="pages">#F1F4F9</color>
     <color name="blue">#3E859F</color>
     <color name="yellow">#FFEB3B</color>
-    
+    <color name="transparan">#00FFFFFF</color>
+    <color name="blue2">#00B5FE</color>
+
+
 
 </resources>

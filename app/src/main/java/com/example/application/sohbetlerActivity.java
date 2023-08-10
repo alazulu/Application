@@ -7,11 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.application.R;
 import com.example.application.models.DbUser;
 import com.example.application.models.sohbetAdapter;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -23,11 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
-
 public class sohbetlerActivity extends AppCompatActivity {
 
     private MaterialToolbar toolbar;
@@ -35,7 +28,6 @@ public class sohbetlerActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseUser user;
     private DatabaseReference db;
-    private DbUser dbUser=new DbUser();
     private sohbetAdapter adapter=new sohbetAdapter();
 
     @Override
@@ -52,64 +44,55 @@ public class sohbetlerActivity extends AppCompatActivity {
         toolbar=findViewById(R.id.stoolbar);
         setSupportActionBar(toolbar);
 
-        db.child("mesajlar").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot grups:snapshot.getChildren()) {
-                    String grupkey=grups.getKey();
-                    db.child("mesajlar").child(grupkey).child("kisiler").addValueEventListener(new ValueEventListener() {
-                        String arkadas="";
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapid) {
-                            for(DataSnapshot ids:snapid.getChildren()){
+       db.child("mesajlar").addListenerForSingleValueEvent(new ValueEventListener() {
+           @Override
+           public void onDataChange(@NonNull DataSnapshot snapshot) {
+               for (DataSnapshot i:snapshot.getChildren()) {
+                   String grupname=i.getKey();
+                   DataSnapshot kisiler= i.child("kisiler");
 
-                                if(Objects.equals(ids.getKey(), user.getUid())){
-                                    arkadas= ids.getValue(String.class);
-                                    Log.d("+++++++++",ids.getValue(String.class));
-                                    db.child("users").child(arkadas).addValueEventListener(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapuser) {
-                                            Log.d("-->-->-->",grupkey);
-                                            dbUser.setUseruserId(arkadas);
-                                            dbUser.setUserMail(grupkey);
-                                            dbUser.setUserIsim(snapuser.child("ad").getValue(String.class));
-                                            dbUser.setUserImageurl(snapuser.child("image").getValue(String.class));
-                                            dbUser.setUserSoyisim(snapuser.child("soyad").getValue(String.class));
-                                            adapter.addsohbetItem(dbUser);
+                   for(DataSnapshot k:kisiler.getChildren()){
+                       if(k.getKey().equals(user.getUid())){
+                           String arkadas=k.getValue(String.class);
+                           db.child("users").child(arkadas).addListenerForSingleValueEvent(new ValueEventListener() {
+                               @Override
+                               public void onDataChange(@NonNull DataSnapshot snap) {
+                                   DbUser sUser=new DbUser();
+                                   sUser.setUserIsim(snap.child("ad").getValue(String.class));
+                                   sUser.setUserSoyisim(snap.child("soyad").getValue(String.class));
+                                   sUser.setUserImageurl(snap.child("image").getValue(String.class));
+                                   sUser.setUserMail(i.getKey());
+                                   sUser.setUseruserId(arkadas);
 
-                                            String arkadas="";
-                                            dbUser=new DbUser();
+                                   adapter.addsohbetItem(sUser);
 
 
-                                        }
+                               }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
+                               @Override
+                               public void onCancelled(@NonNull DatabaseError error) {
 
-                                        }
-                                    });
+                               }
+                           });
 
-                                    adapter.clear();
 
-                                }
-                            }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
-                    });
 
-                }
-            }
+                       }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                   }
 
-            }
-        });
+               }
 
+
+           }
+
+           @Override
+           public void onCancelled(@NonNull DatabaseError error) {
+
+           }
+       });
 
 
     }

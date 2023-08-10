@@ -2,7 +2,6 @@ package com.example.application.models;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class sohbetAdapter extends RecyclerView.Adapter<sohbetAdapter.ViewHolder> {
@@ -45,11 +43,10 @@ public class sohbetAdapter extends RecyclerView.Adapter<sohbetAdapter.ViewHolder
     public void addsohbetItem(DbUser sUser) {
         sUsers.add(sUser);
         notifyDataSetChanged();
-
-
     }
     public void clear(){
         sUsers.clear();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -91,18 +88,15 @@ public class sohbetAdapter extends RecyclerView.Adapter<sohbetAdapter.ViewHolder
             String url = sUser.getUserImageurl();
             Context context = sohbet_iv.getContext();
             PicassoCache.getPicassoInstance(context).load(url).error(R.drawable.error).resize(200, 200).into(sohbet_iv);
-            Log.d("---------",sUser.getUserMail());
-            db.child(sUser.getUserMail()).child("mesajlar").addValueEventListener(new ValueEventListener() {
+
+            db.child(sUser.getUserMail()).child("mesajlar").orderByChild("timestamp").limitToLast(1).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot i:snapshot.getChildren()){
-
-
-
-
+                    for(DataSnapshot a:snapshot.getChildren()){
+                    sohbet_last.setText(a.child("mesaj").getValue(String.class));
+                    String time=cm.simpledateformat(a.child("timestamp").getValue(Long.class));
+                    sohbet_time.setText(time);
                     }
-
-
                 }
 
                 @Override
@@ -110,6 +104,10 @@ public class sohbetAdapter extends RecyclerView.Adapter<sohbetAdapter.ViewHolder
 
                 }
             });
+
+
+
+
 
 
             sohbet_btn.setOnClickListener(new View.OnClickListener() {

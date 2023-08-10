@@ -1,16 +1,18 @@
 package com.example.application;
 
+import static android.app.Activity.RESULT_OK;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
-
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,28 +21,35 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthOptions;
-import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 
 public class profilFragment extends Fragment {
 
-    TextView adsoyad,tel,mail;
-    ImageView ivprofil;
-    FirebaseUser user;
-    Button btnsfr,btnmail,btntel,btnonaymail,btndelete;
+    private TextView adsoyad,tel,mail;
+    private ImageView ivprofil;
+    private FirebaseUser user;
+    private Button btnsfr,btnmail,btntel,btnonaymail,btndelete;
+    private FloatingActionButton btnF;
+    private StorageReference storageRef = FirebaseStorage.getInstance().getReference("usersphoto");
+    private DatabaseReference db;
 
 
     @Override
@@ -63,6 +72,8 @@ public class profilFragment extends Fragment {
         btnsfr=v.findViewById(R.id.btnsfr);
         btnonaymail=v.findViewById(R.id.btnonaymail);
         btndelete=v.findViewById(R.id.btndelete);
+        btnF=v.findViewById(R.id.btnphoto);
+        db= FirebaseDatabase.getInstance().getReference("users");
 
         user= FirebaseAuth.getInstance().getCurrentUser();
 
@@ -88,19 +99,17 @@ public class profilFragment extends Fragment {
             }
         });
 
-        if(user.getPhotoUrl()==null) {
-            ivprofil.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profil));
-        }else {
-            Bitmap image = null;
-            try {
-                image = Picasso.get().load(user.getPhotoUrl().toString()).resize(100, 100).get();
-                ivprofil.setImageBitmap(image);
-            } catch (IOException e) {
-                ivprofil.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profil));
-                throw new RuntimeException(e);
+        db.child(user.getUid()).child("image").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Picasso.get().load(snapshot.getValue(String.class)).resize(300, 300).into(ivprofil);
             }
 
-        }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                ivprofil.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profil));
+            }
+        });
 
         if (user.isEmailVerified()){
             btnonaymail.setVisibility(View.INVISIBLE);
@@ -123,17 +132,8 @@ public class profilFragment extends Fragment {
             });
         }
 
-        if( user.getPhoneNumber().equals("") || user.getPhoneNumber() == null ){
-            Log.d("TAG", user.getPhoneNumber().toString());
-            btntel.setText(getString(R.string.toast12));
-            btntel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(getActivity(),TelkayitActivity.class));
-
-                }
-            });
-        }else {
+        String TelNo=user.getPhoneNumber();
+        if(TelNo!= null &&  !TelNo.isEmpty() ){
             tel.setText(user.getPhoneNumber().toString());
             btntel.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -142,6 +142,16 @@ public class profilFragment extends Fragment {
                 }
             });
 
+        }else {
+
+            btntel.setText(getString(R.string.toast12));
+            btntel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getActivity(),TelkayitActivity.class));
+
+                }
+            });
         }
 
 
@@ -179,7 +189,61 @@ public class profilFragment extends Fragment {
         });
 
 
+        btnF.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                galleryLauncher.launch(galleryIntent);
+            }
+        });
+
+
         return v;
     }
+
+    ActivityResultLauncher<Intent> galleryLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == RESULT_OK) {
+                    Intent data = result.getData();
+                    Uri selectedImage=data.getData();
+
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), selectedImage);
+                        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, false);
+
+
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        byte[] data1 = baos.toByteArray();
+
+
+                        StorageReference photoRef=storageRef.child(user.getUid() +"/"+ selectedImage.getLastPathSegment());
+                        UploadTask utask = photoRef.putBytes(data1);
+                        utask.addOnSuccessListener(taskSnapshot ->{
+                            photoRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                String url=uri.toString();
+                                Log.d("image",url);
+                                db.child(user.getUid()).child("image").setValue(url).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(getContext(),getString(R.string.toast35),Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }).addOnFailureListener(exception ->{
+                                Toast.makeText(getContext(),getString(R.string.toast11)+": "+exception.toString(),Toast.LENGTH_LONG).show();
+                            });
+
+                        }).addOnFailureListener(exception ->{
+                            Toast.makeText(getContext(),getString(R.string.toast11)+": "+exception.toString(),Toast.LENGTH_LONG).show();
+                        });
+
+                    } catch (IOException e) {
+                        Toast.makeText(getContext(),getString(R.string.toast11)+": "+e.toString(),Toast.LENGTH_LONG).show();
+                    }
+
+                }
+            }
+    );
 
 }

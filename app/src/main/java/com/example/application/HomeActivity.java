@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment;
 
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
@@ -27,9 +26,12 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -38,6 +40,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseUser user;
+    private DatabaseReference db=FirebaseDatabase.getInstance().getReference("users");
     private DrawerLayout drawerLayout;
     private NavigationView nv;
     private BottomNavigationView bnv;
@@ -66,24 +69,26 @@ public class HomeActivity extends AppCompatActivity {
         ivheader=header.findViewById(R.id.ivheader);
         aktifFragment=new anasayfaFragment();
 
+
         if (getLocaleSharedPreferances(HomeActivity.this).equals("en")){
             toggleGroup.check(R.id.btneng);
         }else {
             toggleGroup.check(R.id.btntr);
         }
-
-        if(user.getPhotoUrl()==null) {
-            ivheader.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profil));
-        }else {
-            Bitmap image = null;
-            try {
-                image = Picasso.get().load(user.getPhotoUrl().toString()).resize(100, 100).get();
-                ivheader.setImageBitmap(image);
-            } catch (IOException e) {
-                ivheader.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profil));
-                throw new RuntimeException(e);
+        db.child(user.getUid()).child("image").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Picasso.get().load(snapshot.getValue(String.class)).resize(100, 100).into(ivheader);
             }
-        }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                ivheader.setImageBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.profil));
+            }
+        });
+
+
+
         tvheader.setText(user.getDisplayName());
         tvheader1.setText(user.getEmail());
 
@@ -100,7 +105,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, arkadasActivity.class));
 
             }else if (itemid==R.id.nav_favori) {
-
+                startActivity(new Intent(HomeActivity.this,FavoriActivity.class));
             } else if (itemid==R.id.nav_ara) {
                 startActivity(new Intent(HomeActivity.this,SearchActivity.class));
             } else if (itemid==R.id.nav_mesaj) {
@@ -142,15 +147,15 @@ public class HomeActivity extends AppCompatActivity {
                 // Seçilen öğenin ID'sini alın ve seçili öğenin metnini Toast ile gösterin.
                 if (isChecked) {
                     if(checkedId==R.id.btneng){
-                        Toast.makeText(HomeActivity.this,getString(R.string.toast34),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this,R.string.toast34,Toast.LENGTH_SHORT).show();
                         cm.setLocale(HomeActivity.this,"en");
+                        startActivity(new Intent(HomeActivity.this,LoginActivity.class));
                         finish();
-                        getIntent();
                     }else {
-                        Toast.makeText(HomeActivity.this,getString(R.string.toast34),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this,R.string.toast34,Toast.LENGTH_SHORT).show();
                         cm.setLocale(HomeActivity.this,"tr");
+                        startActivity(new Intent(HomeActivity.this,LoginActivity.class));
                         finish();
-                        getIntent();
                     }
                 }
             }

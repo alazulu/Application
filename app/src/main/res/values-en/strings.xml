@@ -70,4 +70,24 @@
     <string name="toast31">Code Verified Successfully</string>
     <string name="toast32">Bad Verification Code!</string>
     <string name="toast33">An unexpected error occurred</string>
+    <string name="kul_ara">Search Users</string>
+    <string name="toast34">Seçilen Dil: Türkçe</string>
+    <string name="ara_kullanici">User Name</string>
+    <string name="ara">Search</string>
+    <string name="ara_istek">Send Request</string>
+    <string name="kbl">Accept</string>
+    <string name="rd">Reject</string>
+    <string name="stk">Requests</string>
+    <string name="grup_kur">Create group</string>
+    <string name="bldrm">Notifications</string>
+    <string name="msj">Messages</string>
+    <string name="skip">Skip</string>
+    <string name="splash1">See Posts: \nView your friends latest posts and updates in one place. Do not miss the developments in their life.</string>
+    <string name="splash2">Follow Events: \nView the events organized by your friends and follow them so you dont miss them. Have a good time with them.</string>
+    <string name="splash3">Messaging Ease: \nEasily message your friends and stay in touch. Share your new memories and stay in touch.</string>
+    <string name="msjat">Send Message</string>
+    <string name="shbt">Chats</string>
+    <string name="toast35">The photo was successfully changed</string>
+    <string name="toast36">Request Sent</string>
+    <string name="bldmyk">No Notifications to Show</string>
 </resources>
