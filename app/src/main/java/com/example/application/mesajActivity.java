@@ -1,10 +1,5 @@
 package com.example.application;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +9,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.application.models.DbUser;
 import com.example.application.models.PicassoCache;
@@ -65,6 +65,52 @@ public class mesajActivity extends AppCompatActivity {
         final String[] grupAdi = new String[1];
         db = FirebaseDatabase.getInstance().getReference().child("mesajlar");
 
+        btnmesaj.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (adapter.getItemCount()==0) {
+                    mesaj = new HashMap<>();
+                    mesaj.put("gonderen", user.getUid());
+                    mesaj.put("mesaj", etmesaj.getText().toString());
+                    mesaj.put("timestamp", System.currentTimeMillis());
+
+                    if (!etmesaj.getText().toString().equals("")) {
+                        HashMap<String, String> kisi = new HashMap<>();
+                        kisi.put(user.getUid(), dbUser.getUseruserId());
+                        kisi.put(dbUser.getUseruserId(), user.getUid());
+                        String grupkey = db.push().getKey();
+                        db.child(grupkey).child("mesajlar").push().setValue(mesaj);
+                        db.child(grupkey).child("kisiler").setValue(kisi);
+                        cm.hideKeyboard(mesajActivity.this);
+                        etmesaj.setText("");
+                        adapter.clear();
+
+                    } else {
+                        Toast.makeText(mesajActivity.this, R.string.toast39, Toast.LENGTH_SHORT).show();
+                    }
+
+                }else {
+                    mesaj = new HashMap<>();
+                    mesaj.put("gonderen", user.getUid());
+                    mesaj.put("mesaj", etmesaj.getText().toString());
+                    mesaj.put("timestamp", System.currentTimeMillis());
+
+                    if (!etmesaj.getText().toString().equals("")) {
+
+                        adapter.clear();
+                        db.child(grupAdi[0]).child("mesajlar").push().setValue(mesaj);
+                        cm.hideKeyboard(mesajActivity.this);
+                        etmesaj.setText("");
+
+                    } else {
+                        Toast.makeText(mesajActivity.this, R.string.toast39, Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            }
+        });
+
 
         CompletableFuture<String> groupFuture = cm.findMatchingGroup(user.getUid(), dbUser.getUseruserId());
         groupFuture.thenAccept(groupName -> {
@@ -73,13 +119,16 @@ public class mesajActivity extends AppCompatActivity {
                 db.child(groupName).child("mesajlar").orderByChild("timestamp").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        adapter.clear();
                         for(DataSnapshot satir:snapshot.getChildren()){
                             mesaj=new HashMap<>();
                             mesaj.put("gonderen",satir.child("gonderen").getValue(String.class));
                             mesaj.put("mesaj",satir.child("mesaj").getValue(String.class));
                             mesaj.put("timestamp",satir.child("timestamp").getValue(Long.class));
                             adapter.addmesajItem(mesaj);
+
                         }
+                        rcmesaj.scrollToPosition(adapter.getItemCount()-1);
                     }
 
                     @Override
@@ -88,57 +137,12 @@ public class mesajActivity extends AppCompatActivity {
                     }
                 });
             } else {
-                // Eşleşen grup bulunamadığında burada işlemler yapabilirsiniz
                 Log.d("TAG", "No matching group found.");
             }
         });
 
 
-            btnmesaj.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
 
-                    if (adapter.getItemCount()==0) {
-                        mesaj = new HashMap<>();
-                        mesaj.put("gonderen", user.getUid());
-                        mesaj.put("mesaj", etmesaj.getText().toString());
-                        mesaj.put("timestamp", System.currentTimeMillis());
-
-                        if (!etmesaj.getText().toString().equals("")) {
-                            HashMap<String, String> kisi = new HashMap<>();
-                            kisi.put(user.getUid(), dbUser.getUseruserId());
-                            kisi.put(dbUser.getUseruserId(), user.getUid());
-                            String grupkey = db.push().getKey();
-                            db.child(grupkey).child("mesajlar").push().setValue(mesaj);
-                            db.child(grupkey).child("kisiler").setValue(kisi);
-                            cm.hideKeyboard(mesajActivity.this);
-                            etmesaj.setText("");
-                            adapter.clear();
-
-                        } else {
-                            Toast.makeText(mesajActivity.this, "Mesaj giriniz", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }else {
-
-                        mesaj = new HashMap<>();
-                        mesaj.put("gonderen", user.getUid());
-                        mesaj.put("mesaj", etmesaj.getText().toString());
-                        mesaj.put("timestamp", System.currentTimeMillis());
-
-                        if (!etmesaj.getText().toString().equals("")) {
-                            db.child(grupAdi[0]).child("mesajlar").push().setValue(mesaj);
-                            cm.hideKeyboard(mesajActivity.this);
-                            etmesaj.setText("");
-                            adapter.clear();
-
-                        } else {
-                            Toast.makeText(mesajActivity.this, "Mesaj giriniz", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                }
-            });
 
 
         tvmesaj.setText(dbUser.getUserIsim()+" "+dbUser.getUserSoyisim());

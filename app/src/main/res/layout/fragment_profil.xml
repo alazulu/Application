@@ -43,13 +43,14 @@
     <com.google.android.material.floatingactionbutton.FloatingActionButton
 
         android:id="@+id/btnphoto"
+        style="@style/CustomFabStyle"
         android:layout_marginEnd="-16dp"
         android:layout_marginBottom="-20dp"
         android:backgroundTint="@color/orange"
-        app:srcCompat="@drawable/camera_24"
-        style="@style/CustomFabStyle"
         app:layout_constraintBottom_toBottomOf="@+id/cv1"
-        app:layout_constraintEnd_toEndOf="@+id/cv1" />
+        app:layout_constraintEnd_toEndOf="@+id/cv1"
+        app:rippleColor="@color/lightOrange"
+        app:srcCompat="@drawable/camera_24" />
 
 
     <TextView

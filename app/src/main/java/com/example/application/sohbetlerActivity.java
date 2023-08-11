@@ -1,14 +1,14 @@
 package com.example.application;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.application.models.DbUser;
 import com.example.application.models.sohbetAdapter;
@@ -65,27 +65,16 @@ public class sohbetlerActivity extends AppCompatActivity {
                                    sUser.setUseruserId(arkadas);
 
                                    adapter.addsohbetItem(sUser);
-
-
                                }
-
                                @Override
                                public void onCancelled(@NonNull DatabaseError error) {
 
                                }
                            });
-
-
-
-
-
                        }
-
                    }
-
                }
-
-
+               adapter.clear();
            }
 
            @Override
@@ -93,8 +82,6 @@ public class sohbetlerActivity extends AppCompatActivity {
 
            }
        });
-
-
     }
 
     @Override
@@ -104,7 +91,6 @@ public class sohbetlerActivity extends AppCompatActivity {
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
 
         if(item.getItemId()==R.id.cikis){
             auth.signOut();

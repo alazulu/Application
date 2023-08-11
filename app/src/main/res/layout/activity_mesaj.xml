@@ -59,7 +59,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/etstyle2"
         android:ems="10"
-        android:hint="Mesaj"
+        android:hint="@string/mesaj"
         android:inputType="text"
         android:maxLines="1"
         app:layout_constraintBottom_toBottomOf="parent"

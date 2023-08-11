@@ -44,7 +44,7 @@ public class arkadasAdapter extends RecyclerView.Adapter<arkadasAdapter.arkadasV
     @NonNull
     @Override
     public arkadasAdapter.arkadasViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.araitem, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.searchitem, parent, false);
         return new arkadasAdapter.arkadasViewHolder(view);
     }
 

@@ -89,6 +89,10 @@
     <string name="toast35">Fotoğraf başarıyla değiştirildi</string>
     <string name="toast36">İstek Gönderildi</string>
     <string name="bldmyk">Gösterilecek Bildirim Yok</string>
+    <string name="toast37">Lütfen arama kısmını boş bırakmayınız</string>
+    <string name="toast38">Database Hatası: </string>
+    <string name="toast39">Mesaj giriniz</string>
+    <string name="mesaj">Mesaj</string>
 
 
 </resources>

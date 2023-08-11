@@ -70,7 +70,6 @@ public class istekAdapter extends RecyclerView.Adapter<istekAdapter.istekViewHol
             istek_iv=itemView.findViewById(R.id.ivistek);
             istek_kbl=itemView.findViewById(R.id.btnistek1);
             istek_red=itemView.findViewById(R.id.btnistek2);
-
         }
 
         public void bind(DbUser user){
@@ -92,8 +91,6 @@ public class istekAdapter extends RecyclerView.Adapter<istekAdapter.istekViewHol
                                         @Override
                                         public void onSuccess(Void unused) {
                                             Toast.makeText(itemView.getContext(), user.getUserIsim()+" ile arkadaş oldunuz",Toast.LENGTH_LONG).show();
-                                            istek_kbl.setClickable(false);
-
                                         }
                                     });
                                 }
@@ -110,22 +107,12 @@ public class istekAdapter extends RecyclerView.Adapter<istekAdapter.istekViewHol
                         @Override
                         public void onSuccess(Void unused) {
                             Toast.makeText(itemView.getContext(), user.getUserIsim()+"'in arkadaşlık isteğini reddettiniz",Toast.LENGTH_LONG).show();
-
                         }
                     });
-
                 }
             });
-
-
-
         }
-
-
     }
-
-
-
 }
 
 

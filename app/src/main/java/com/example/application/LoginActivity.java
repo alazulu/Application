@@ -1,15 +1,21 @@
 package com.example.application;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.application.models.cm;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -17,15 +23,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class LoginActivity extends AppCompatActivity {
 
-    Button btn,btn1;
-    FirebaseAuth auth;
-    FirebaseUser user;
-    EditText mail;
-    EditText sifre;
-    TextView tvreset;
+    private Button btn,btn1;
+    private FirebaseAuth auth;
+    private FirebaseUser user;
+    private EditText mail,sifre;
+    private TextView tvreset;
 
 
     @Override
@@ -40,6 +46,39 @@ public class LoginActivity extends AppCompatActivity {
         mail=findViewById(R.id.etmail);
         sifre=findViewById(R.id.etsifre);
         tvreset=findViewById(R.id.tvreset);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel("channel_id", "Channel Name", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+// İzin isteği yap
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                        return;
+                    }
+
+                    // FCM token'ı al
+                    String token = task.getResult();
+                    Log.d(TAG, "Token: " + token);
+
+                    // İzin isteği yap
+                    FirebaseMessaging.getInstance().subscribeToTopic("topic_name")
+                            .addOnCompleteListener(subscribeTask -> {
+                                if (subscribeTask.isSuccessful()) {
+                                    Log.d("++++++++++++++++++++++", "Izin alindi");
+                                } else {
+                                    Log.e("----------------------", "Izin alinamadi", subscribeTask.getException());
+                                }
+                            });
+                });
+
+
+
 
         tvreset.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,7 +148,6 @@ public class LoginActivity extends AppCompatActivity {
             finish();
         }
     }
-
 
 
 

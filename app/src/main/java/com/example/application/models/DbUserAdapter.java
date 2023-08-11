@@ -44,7 +44,7 @@ public class DbUserAdapter extends RecyclerView.Adapter<DbUserAdapter.DbUserView
     @NonNull
     @Override
     public DbUserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
-        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.araitem,parent,false);
+        View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.searchitem,parent,false);
         return new DbUserViewHolder(view);
     }
     @Override
@@ -79,13 +79,12 @@ public class DbUserAdapter extends RecyclerView.Adapter<DbUserAdapter.DbUserView
             String userid= user.getUseruserId();
             if (user.getUserIstek()==0){
                 ara_btn.setText(R.string.toast36);
-                ara_btn.setBackgroundColor(R.color.grey3);
-            }else {
+                ara_btn.setEnabled(false);
                 ara_btn.setClickable(false);
             }
 
-            if (user.getUserZaman()!=946684800){
 
+            if (user.getUserZaman()!=946684800){
                 ara_time.setText(cm.simpledateformat(user.getUserZaman()));
             }
 
@@ -101,8 +100,7 @@ public class DbUserAdapter extends RecyclerView.Adapter<DbUserAdapter.DbUserView
                         @Override
                         public void onSuccess(Void unused) {
                             ara_btn.setText(R.string.toast36);
-                            ara_btn.setClickable(false);
-                            ara_btn.setBackgroundColor(R.color.grey3);
+                            ara_btn.setEnabled(false);
                             ara_time.setText(cm.simpledateformat(System.currentTimeMillis()));
                         }
                     });

@@ -2,14 +2,9 @@ package com.example.application;
 
 import static com.example.application.models.cm.getLocaleSharedPreferances;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-
-
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,6 +13,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.example.application.models.cm;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -68,6 +69,12 @@ public class HomeActivity extends AppCompatActivity {
         tvheader1=header.findViewById(R.id.tvheader1);
         ivheader=header.findViewById(R.id.ivheader);
         aktifFragment=new anasayfaFragment();
+
+        String uid= user.getUid();
+        SharedPreferences sharedPref = getSharedPreferences("locale", Context.MODE_PRIVATE);
+        String token=sharedPref.getString("fcmtoken", "");
+        storeFCMToken(uid,token);
+
 
 
         if (getLocaleSharedPreferances(HomeActivity.this).equals("en")){
@@ -202,7 +209,10 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-
+    public void storeFCMToken(String userId, String fcmToken) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
+        userRef.child("fcmToken").setValue(fcmToken);
+    }
 
 
 }

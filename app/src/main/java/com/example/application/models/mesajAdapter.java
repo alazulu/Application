@@ -36,7 +36,6 @@ public class mesajAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         messages.add(message);
         notifyDataSetChanged();
 
-
     }
     public void clear(){
         messages.clear();

@@ -90,4 +90,8 @@
     <string name="toast35">The photo was successfully changed</string>
     <string name="toast36">Request Sent</string>
     <string name="bldmyk">No Notifications to Show</string>
+    <string name="toast37">Please do not leave the search field blank</string>
+    <string name="toast38">Database Error: </string>
+    <string name="toast39">Entry Message</string>
+    <string name="mesaj">Message</string>
 </resources>
