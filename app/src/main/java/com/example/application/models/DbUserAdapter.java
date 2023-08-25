@@ -37,6 +37,7 @@ public class DbUserAdapter extends RecyclerView.Adapter<DbUserAdapter.DbUserView
         notifyDataSetChanged();
     }
 
+
     public void clear(){
         dbUsers.clear();
     }
