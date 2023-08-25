@@ -31,7 +31,7 @@
     <string name="telnodgr">Telefon No Değiştir</string>
     <string name="profil">Profil</string>
     <string name="arkadas">Arkadaşlar</string>
-    <string name="favori">Favoriler</string>
+    <string name="favori">Kaydedilen içerikler</string>
     <string name="cks">ÇIKIŞ</string>
     <string name="iletisim">İLETİŞİM</string>
     <string name="tlfn">Telefon</string>
@@ -93,6 +93,11 @@
     <string name="toast38">Database Hatası: </string>
     <string name="toast39">Mesaj giriniz</string>
     <string name="mesaj">Mesaj</string>
+    <string name="msj_git">Mesaja Git</string>
+    <string name="yeni_mesaj">Yeni mesajınız var</string>
+    <string name="e_yok">Gösterilecek öğe yok</string>
+    <string name="toast40">Verilere ulaşılamıyor. \nLütfen bağlantınızı kontrol edin!</string>
+    <string name="ttl">Sohbete Başla</string>
 
 
 </resources>

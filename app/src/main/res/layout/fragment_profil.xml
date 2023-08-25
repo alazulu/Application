@@ -50,7 +50,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/cv1"
         app:layout_constraintEnd_toEndOf="@+id/cv1"
         app:rippleColor="@color/lightOrange"
-        app:srcCompat="@drawable/camera_24" />
+        app:srcCompat="@drawable/camera_24"
+        app:fabCustomSize="40dp"/>
 
 
     <TextView

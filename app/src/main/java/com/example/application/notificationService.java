@@ -1,7 +1,9 @@
 package com.example.application;
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
@@ -13,7 +15,6 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import java.io.IOException;
-import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -23,32 +24,43 @@ import okhttp3.Response;
 
 public class notificationService extends FirebaseMessagingService {
 
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // Gelen mesaj verilerini al
-        Map<String, String> data = remoteMessage.getData();
+        String clickAction=remoteMessage.getData().get("click_actions");
+        if ("OPEN_ACTIVITY".equals(clickAction)) {
+            String gonderen = remoteMessage.getData().get("gonderenkey");
+            Intent intent = new Intent(clickAction);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT | PendingIntent.FLAG_MUTABLE);
+            // Bildirim oluştur
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
+                    .setSmallIcon(R.drawable.notifications_24)
+                    .setContentTitle(remoteMessage.getData().get("title"))
+                    .setContentText(remoteMessage.getData().get("body")).setVibrate(new long[] {1000,1000})
+                    .setAutoCancel(true)
+                    .setContentIntent(pIntent);
 
-        // Bildirim oluştur
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "channel_id")
-                .setSmallIcon(R.drawable.notifications_24)
-                .setContentTitle(data.get("title"))
-                .setContentText(data.get("body"))
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
+            // Bildirimi göster
+            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            notificationManager.notify(1, builder.build());
 
-        // Bildirimi göster
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
         }
-        notificationManager.notify(1, builder.build());
     }
+
+
+
+
 
     @Override
     public void onNewToken(String token){
@@ -68,7 +80,6 @@ public class notificationService extends FirebaseMessagingService {
                 .addHeader("Authorization", "key=" + apiKey)
                 .addHeader("Content-Type", "application/json")
                 .build();
-
         try {
             Response response = client.newCall(request).execute();
             String responseBody = response.body().string();
@@ -81,7 +92,5 @@ public class notificationService extends FirebaseMessagingService {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("fcmtoken", token);
         editor.apply();
-
     }
-
 }

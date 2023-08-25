@@ -77,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
+
         if (getLocaleSharedPreferances(HomeActivity.this).equals("en")){
             toggleGroup.check(R.id.btneng);
         }else {

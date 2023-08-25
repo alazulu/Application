@@ -57,14 +57,15 @@ public class NewsAdapter  extends RecyclerView.Adapter<NewsAdapter.NewsViewHolde
         private ImageView ivImage;
         private LinearLayout itemlay;
 
-
-        public NewsViewHolder (@NonNull View itemView){
+        public NewsViewHolder (@NonNull View itemView) {
             super(itemView);
-            tvicerik=itemView.findViewById(R.id.tvicerik);
-            tvbaslik=itemView.findViewById(R.id.tvbaslik);
-            ivImage=itemView.findViewById(R.id.ivimage);
-            itemlay=itemView.findViewById(R.id.lnitemlayout);
+            tvicerik = itemView.findViewById(R.id.tvicerik);
+            tvbaslik = itemView.findViewById(R.id.tvbaslik);
+            ivImage = itemView.findViewById(R.id.ivimage);
+            itemlay = itemView.findViewById(R.id.lnitemlayout);
+
         }
+
 
         public void bind(NewsItem item){
             tvicerik.setText(item.getItemContent().toString());
@@ -80,6 +81,7 @@ public class NewsAdapter  extends RecyclerView.Adapter<NewsAdapter.NewsViewHolde
                     openWebsite(v.getContext(), website);
                 }
             });
+
 
         }
         private void openWebsite(Context context, String url) {

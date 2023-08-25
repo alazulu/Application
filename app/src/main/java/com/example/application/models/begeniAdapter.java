@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.application.R;
@@ -22,19 +23,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.PagerViewHolder> {
+public class begeniAdapter extends RecyclerView.Adapter<begeniAdapter.begeniViewHolder> {
 
     private List<NewsItem> Items;
     private List<NewsCheck> cItems;
     private FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
     private DatabaseReference db= FirebaseDatabase.getInstance().getReference("favoriler").child(user.getUid());
 
-    public ViewPagerAdapter(){
+    public begeniAdapter(){
         Items=new ArrayList<>();
         cItems=new ArrayList<>();
     }
 
-    public void addPagerAdapter(NewsItem item,NewsCheck cItem) {
+    public void addbegeniAdapter(NewsItem item,NewsCheck cItem) {
         Items.add(item);
         cItems.add(cItem);
         notifyDataSetChanged();
@@ -42,13 +43,13 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.Page
 
     @NonNull
     @Override
-    public PagerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public begeniAdapter.begeniViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewpageritem, parent, false);
-        return new PagerViewHolder(view);
+        return new begeniAdapter.begeniViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PagerViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull begeniAdapter.begeniViewHolder holder, int position) {
         NewsItem item= Items.get(position);
         NewsCheck cItem= cItems.get(position);
         holder.bind(item,cItem);
@@ -61,22 +62,24 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.Page
 
 
 
-    public class PagerViewHolder extends RecyclerView.ViewHolder {
+    public class begeniViewHolder extends RecyclerView.ViewHolder {
 
         private TextView tvicerik;
         private TextView tvbaslik;
         private ImageView ivImage, ivFavorite;
         private Button btnpager;
+        private ConstraintLayout vplayout;
 
 
 
-        public PagerViewHolder(@NonNull View itemView){
+        public begeniViewHolder(@NonNull View itemView){
             super(itemView);
             tvicerik=itemView.findViewById(R.id.tvpager2);
             tvbaslik=itemView.findViewById(R.id.tvpager);
             ivImage=itemView.findViewById(R.id.ivpager);
             btnpager=itemView.findViewById(R.id.btnpager);
             ivFavorite=itemView.findViewById(R.id.ivfavorite);
+            vplayout=itemView.findViewById(R.id.vplayout);
 
         }
 
@@ -88,6 +91,9 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.Page
             Context context=ivImage.getContext();
             PicassoCache.getPicassoInstance(context).load(imageurl).error(R.drawable.error).resize(300,300).into(ivImage);
             String website=item.getItemUrl().toString();
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) vplayout.getLayoutParams();
+            params.setMargins(24, 32, 24, 64);
+            vplayout.setLayoutParams(params);
 
             btnpager.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -127,4 +133,3 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.Page
         }
     }
 }
-

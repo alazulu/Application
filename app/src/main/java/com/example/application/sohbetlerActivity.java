@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.application.models.DbUser;
 import com.example.application.models.sohbetAdapter;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -29,6 +31,7 @@ public class sohbetlerActivity extends AppCompatActivity {
     private FirebaseUser user;
     private DatabaseReference db;
     private sohbetAdapter adapter=new sohbetAdapter();
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,25 +41,36 @@ public class sohbetlerActivity extends AppCompatActivity {
         auth=FirebaseAuth.getInstance();
         user=auth.getCurrentUser();
         db= FirebaseDatabase.getInstance().getReference();
+        fab=findViewById(R.id.fabSohbet);
         rcsohbet=findViewById(R.id.rcsohbet);
         rcsohbet.setLayoutManager(new LinearLayoutManager(this));
         rcsohbet.setAdapter(adapter);
         toolbar=findViewById(R.id.stoolbar);
         setSupportActionBar(toolbar);
 
-       db.child("mesajlar").addListenerForSingleValueEvent(new ValueEventListener() {
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(sohbetlerActivity.this,arkadasbulActivity.class));
+            }
+        });
+
+
+
+       db.child("mesajlar").addValueEventListener(new ValueEventListener() {
            @Override
            public void onDataChange(@NonNull DataSnapshot snapshot) {
+               adapter.clear();
                for (DataSnapshot i:snapshot.getChildren()) {
                    String grupname=i.getKey();
                    DataSnapshot kisiler= i.child("kisiler");
-
                    for(DataSnapshot k:kisiler.getChildren()){
                        if(k.getKey().equals(user.getUid())){
                            String arkadas=k.getValue(String.class);
-                           db.child("users").child(arkadas).addListenerForSingleValueEvent(new ValueEventListener() {
+                           db.child("users").child(arkadas).addValueEventListener(new ValueEventListener() {
                                @Override
                                public void onDataChange(@NonNull DataSnapshot snap) {
+                                   adapter.clear();
                                    DbUser sUser=new DbUser();
                                    sUser.setUserIsim(snap.child("ad").getValue(String.class));
                                    sUser.setUserSoyisim(snap.child("soyad").getValue(String.class));
@@ -64,7 +78,27 @@ public class sohbetlerActivity extends AppCompatActivity {
                                    sUser.setUserMail(i.getKey());
                                    sUser.setUseruserId(arkadas);
 
-                                   adapter.addsohbetItem(sUser);
+                                   DatabaseReference last=i.getRef();
+                                   last.child("mesajlar").orderByChild("timestamp").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                                       @Override
+                                       public void onDataChange(@NonNull DataSnapshot s) {
+                                           for (DataSnapshot sonmesaj:s.getChildren()){
+                                               sUser.setUserZaman(sonmesaj.child("timestamp").getValue(Long.class));
+                                               sUser.setUserTel(sonmesaj.child("mesaj").getValue(String.class));
+                                               if(sonmesaj.child("gonderen").getValue(String.class).equals(user.getUid())){
+                                                   sUser.setUserIstek(1);
+                                               }else {
+                                                   sUser.setUserIstek(0);
+                                               }
+                                           }
+                                           adapter.addsohbetItem(sUser);
+                                       }
+
+                                       @Override
+                                       public void onCancelled(@NonNull DatabaseError error) {
+
+                                       }
+                                   });
                                }
                                @Override
                                public void onCancelled(@NonNull DatabaseError error) {
@@ -74,7 +108,6 @@ public class sohbetlerActivity extends AppCompatActivity {
                        }
                    }
                }
-               adapter.clear();
            }
 
            @Override

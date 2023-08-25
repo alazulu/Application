@@ -14,26 +14,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.application.R;
 import com.example.application.mesajActivity;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class sohbetAdapter extends RecyclerView.Adapter<sohbetAdapter.ViewHolder> {
 
     private List<DbUser> sUsers;
-    static FirebaseAuth auth = FirebaseAuth.getInstance();
-    static FirebaseUser currentUser = auth.getCurrentUser();
     static DatabaseReference db = FirebaseDatabase.getInstance().getReference("mesajlar");
-
-
 
     public sohbetAdapter() {
         sUsers = new ArrayList<>();
@@ -43,6 +34,15 @@ public class sohbetAdapter extends RecyclerView.Adapter<sohbetAdapter.ViewHolder
     public void addsohbetItem(DbUser sUser) {
         sUsers.add(sUser);
         notifyDataSetChanged();
+        sUsers.sort(new Comparator<DbUser>() {
+            @Override
+            public int compare(DbUser o1, DbUser o2) {
+                Long oTime1 = o1.getUserZaman();
+                Long oTime2 = o2.getUserZaman();
+                return oTime2.compareTo(oTime1);
+            }
+        });
+
     }
     public void clear(){
         sUsers.clear();
@@ -71,6 +71,7 @@ public class sohbetAdapter extends RecyclerView.Adapter<sohbetAdapter.ViewHolder
         private TextView sohbet_ad, sohbet_time,sohbet_last;
         private ImageView sohbet_iv;
         private Button sohbet_btn;
+        Context context;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -80,41 +81,32 @@ public class sohbetAdapter extends RecyclerView.Adapter<sohbetAdapter.ViewHolder
             sohbet_iv = itemView.findViewById(R.id.iv_sohbet);
             sohbet_time = itemView.findViewById(R.id.sohbet_time);
             sohbet_last=itemView.findViewById(R.id.sohbet_last);
+            context=itemView.getContext();
 
         }
 
         public void bind(DbUser sUser) {
             sohbet_ad.setText(sUser.getUserIsim() + " " + sUser.getUserSoyisim());
             String url = sUser.getUserImageurl();
-            Context context = sohbet_iv.getContext();
-            PicassoCache.getPicassoInstance(context).load(url).error(R.drawable.error).resize(200, 200).into(sohbet_iv);
+            Context c = sohbet_iv.getContext();
+            PicassoCache.getPicassoInstance(c).load(url).error(R.drawable.error).resize(200, 200).into(sohbet_iv);
 
-            db.child(sUser.getUserMail()).child("mesajlar").orderByChild("timestamp").limitToLast(1).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for(DataSnapshot a:snapshot.getChildren()){
-                    sohbet_last.setText(a.child("mesaj").getValue(String.class));
-                    String time=cm.simpledateformat(a.child("timestamp").getValue(Long.class));
-                    sohbet_time.setText(time);
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
-
-
-
+            if (sUser.getUserIstek()==0){
+                sohbet_last.setText(sUser.getUserTel());
+                String time=cm.simpledateformat(sUser.getUserZaman());
+                sohbet_time.setText(time);
+            }else {
+                sohbet_last.setText("Siz: "+sUser.getUserTel());
+                String time=cm.simpledateformat(sUser.getUserZaman());
+                sohbet_time.setText(time);
+            }
 
 
             sohbet_btn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, mesajActivity.class);
-                    intent.putExtra("user", (Serializable) sUser);
+                    intent.putExtra("user", sUser.getUseruserId().toString());
                     context.startActivity(intent);
 
                 }
@@ -125,15 +117,5 @@ public class sohbetAdapter extends RecyclerView.Adapter<sohbetAdapter.ViewHolder
 
 
     }
-
-
-
-
-
-
-
-
-
-
 
 }

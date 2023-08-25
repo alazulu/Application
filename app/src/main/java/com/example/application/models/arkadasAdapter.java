@@ -19,27 +19,25 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class arkadasAdapter extends RecyclerView.Adapter<arkadasAdapter.arkadasViewHolder> {
 
     private List<DbUser> dbUsers;
-    private Context context;
     static FirebaseAuth auth = FirebaseAuth.getInstance();
     static FirebaseUser currentUser = auth.getCurrentUser();
     static DatabaseReference userdb = FirebaseDatabase.getInstance().getReference("users");
 
-    public arkadasAdapter(Context context) {
+    public arkadasAdapter() {
         dbUsers = new ArrayList<>();
-        this.context = context;
     }
 
     public void addDbItem(DbUser user) {
         dbUsers.add(user);
         notifyDataSetChanged();
     }
+    public void clear(){dbUsers.clear();}
 
     @NonNull
     @Override
@@ -73,6 +71,7 @@ public class arkadasAdapter extends RecyclerView.Adapter<arkadasAdapter.arkadasV
             ara_iv = itemView.findViewById(R.id.iv_ara);
             ara_time = itemView.findViewById(R.id.ara_time);
             ara_btn.setText(context.getString(R.string.msjat));
+            context=itemView.getContext();
 
         }
 
@@ -88,7 +87,7 @@ public class arkadasAdapter extends RecyclerView.Adapter<arkadasAdapter.arkadasV
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, mesajActivity.class);
-                    intent.putExtra("user", (Serializable) user);
+                    intent.putExtra("user", user.getUseruserId().toString());
                     context.startActivity(intent);
 
                 }

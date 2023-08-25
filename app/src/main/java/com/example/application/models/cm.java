@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -104,7 +105,42 @@ public class cm {
 
         return future;
     }
+    public static CompletableFuture<String> MatchingGroup(String id1, String id2) {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("mesajlar");
+        CompletableFuture<String> future = new CompletableFuture<>();
 
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot a:snapshot.getChildren()){
+                    DatabaseReference r= a.child("kisiler").getRef();
+                    r.orderByChild(id1).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snaps) {
+                            if(snaps.child(id1).getValue(String.class)!=null && snaps.child(id1).getValue(String.class).equals(id2)){
+                                String grup=a.getKey();
+                                Log.d("Future",grup);
+                                future.complete(grup);
+                                return;
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            Log.d("MatchingGroup Error: ", error.toString());
+                        }
+                    });
+                }
+                future.complete(null);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("MatchingGroup Error: ", error.toString());
+            }
+        });
+
+        return future;
+    }
 
 
 

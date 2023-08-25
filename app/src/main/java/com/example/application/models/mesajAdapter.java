@@ -1,8 +1,10 @@
 package com.example.application.models;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -11,19 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.application.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class mesajAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<HashMap<String,Object>> messages;
+    private List<DbMesaj> messages;
     static FirebaseAuth auth = FirebaseAuth.getInstance();
     static FirebaseUser currentUser = auth.getCurrentUser();
-    static DatabaseReference userdb = FirebaseDatabase.getInstance().getReference("users");
     private static final int VIEW_TYPE_SENDER = 1;
     private static final int VIEW_TYPE_RECEIVER = 2;
 
@@ -32,7 +30,7 @@ public class mesajAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     }
 
-    public void addmesajItem(HashMap<String,Object> message) {
+    public void addmesajItem(DbMesaj message) {
         messages.add(message);
         notifyDataSetChanged();
 
@@ -43,8 +41,8 @@ public class mesajAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-        HashMap<String,Object> message = messages.get(position);
-        if (message.get("gonderen").equals(currentUser.getUid())) {
+        DbMesaj message = messages.get(position);
+        if (message.getGonderen().equals(currentUser.getUid())) {
             return VIEW_TYPE_SENDER;
         } else {
             return VIEW_TYPE_RECEIVER;
@@ -67,7 +65,7 @@ public class mesajAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        HashMap<String,Object> message= messages.get(position);
+        DbMesaj message= messages.get(position);
         if (holder instanceof SenderMessageViewHolder){
             ((SenderMessageViewHolder) holder).bind(message);
         }else ((ReceiverMessageViewHolder) holder).bind(message);
@@ -80,18 +78,25 @@ public class mesajAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public class SenderMessageViewHolder extends RecyclerView.ViewHolder {
         private TextView tm,msj;
+        private ImageView ivcheck;
 
         public SenderMessageViewHolder(@NonNull View itemView) {
             super(itemView);
             msj= itemView.findViewById(R.id.tvitemmesaj);
             tm=itemView.findViewById(R.id.tvitemzaman);
+            ivcheck=itemView.findViewById(R.id.ivcheck);
         }
 
-        public void bind(HashMap<String,Object> message) {
-            msj.setText((String) message.get("mesaj"));
-            String time=cm.simpledateformat((Long) message.get("timestamp"));
+        public void bind(DbMesaj message) {
+            msj.setText((String) message.getMesaj());
+            String time=cm.simpledateformat(message.getTimestamp());
             tm.setText(time);
-
+            Boolean okundu= message.getOkundu();
+            if (okundu==null || okundu){
+                ivcheck.setColorFilter(Color.rgb(239,127,30));
+            }else {
+                ivcheck.setColorFilter(Color.rgb(187,187,187));
+            }
 
         }
     }
@@ -99,16 +104,15 @@ public class mesajAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public class ReceiverMessageViewHolder extends RecyclerView.ViewHolder {
         private TextView tm2,msj2;
 
-
         public ReceiverMessageViewHolder(@NonNull View itemView) {
             super(itemView);
             msj2 = itemView.findViewById(R.id.tvitemmesaj2);
             tm2=itemView.findViewById(R.id.tvitemzaman2);
         }
 
-        public void bind(HashMap<String,Object> message) {
-            msj2.setText((String) message.get("mesaj"));
-            String time=cm.simpledateformat((Long) message.get("timestamp"));
+        public void bind(DbMesaj message) {
+            msj2.setText((String) message.getMesaj());
+            String time=cm.simpledateformat(message.getTimestamp());
             tm2.setText(time);
         }
     }
