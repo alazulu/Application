@@ -66,6 +66,9 @@ public class anasayfaFragment extends Fragment {
             viewPagerAdapter=new ViewPagerAdapter();
             viewPager.setAdapter(viewPagerAdapter);
 
+
+
+
         db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -75,7 +78,7 @@ public class anasayfaFragment extends Fragment {
                 }
 
                 OkHttpClient client = new OkHttpClient();
-                Request request = new Request.Builder().url("https://newsapi.org/v2/everything?q=space&apiKey=f76b5b9e663f47549f8fbbbbbcda027a").build();
+                Request request = new Request.Builder().url("https://newsapi.org/v2/everything?q=spa&apiKey=f76b5b9e663f47549f8fbbbbbcda027a").build();
 
                 client.newCall(request).enqueue(new Callback() {
                     @Override

@@ -63,7 +63,9 @@
                 app:itemRippleColor="@android:color/transparent"
                 app:itemTextColor="@drawable/itemselector"
                 app:labelVisibilityMode="labeled"
-                app:menu="@menu/bottom_navigation_menu" />
+                app:menu="@menu/bottom_navigation_menu" >
+
+            </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 
         </RelativeLayout>

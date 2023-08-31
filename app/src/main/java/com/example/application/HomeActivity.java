@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +22,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.application.models.cm;
+import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.navigation.NavigationBarView;
@@ -41,7 +43,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private FirebaseUser user;
-    private DatabaseReference db=FirebaseDatabase.getInstance().getReference("users");
+    private DatabaseReference db=FirebaseDatabase.getInstance().getReference();
     private DrawerLayout drawerLayout;
     private NavigationView nv;
     private BottomNavigationView bnv;
@@ -50,6 +52,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView tvheader, tvheader1;
     private ImageView ivheader;
     private MaterialButtonToggleGroup toggleGroup;
+    private Context context;
 
 
     @Override
@@ -69,6 +72,7 @@ public class HomeActivity extends AppCompatActivity {
         tvheader1=header.findViewById(R.id.tvheader1);
         ivheader=header.findViewById(R.id.ivheader);
         aktifFragment=new anasayfaFragment();
+        context=this;
 
         String uid= user.getUid();
         SharedPreferences sharedPref = getSharedPreferences("locale", Context.MODE_PRIVATE);
@@ -76,14 +80,12 @@ public class HomeActivity extends AppCompatActivity {
         storeFCMToken(uid,token);
 
 
-
-
         if (getLocaleSharedPreferances(HomeActivity.this).equals("en")){
             toggleGroup.check(R.id.btneng);
         }else {
             toggleGroup.check(R.id.btntr);
         }
-        db.child(user.getUid()).child("image").addValueEventListener(new ValueEventListener() {
+        db.child("users").child(user.getUid()).child("image").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Picasso.get().load(snapshot.getValue(String.class)).resize(100, 100).into(ivheader);
@@ -110,20 +112,18 @@ public class HomeActivity extends AppCompatActivity {
         nv.setNavigationItemSelectedListener(item -> {
             int itemid=item.getItemId();
             if(itemid==R.id.nav_arkadas){
-                startActivity(new Intent(HomeActivity.this, arkadasActivity.class));
-
+                startActivity(new Intent(HomeActivity.this,arkadasActivity.class));
             }else if (itemid==R.id.nav_favori) {
                 startActivity(new Intent(HomeActivity.this,FavoriActivity.class));
             } else if (itemid==R.id.nav_ara) {
                 startActivity(new Intent(HomeActivity.this,SearchActivity.class));
             } else if (itemid==R.id.nav_mesaj) {
-                startActivity(new Intent(HomeActivity.this, sohbetlerActivity.class));
+                startActivity(new Intent(HomeActivity.this,sohbetlerActivity.class));
             }
 
             drawerLayout.closeDrawers();
             return true;
         });
-
 
         getSupportFragmentManager().beginTransaction().replace(R.id.home_container,aktifFragment).commit();
 
@@ -145,7 +145,67 @@ public class HomeActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().replace(R.id.home_container, fr).commit();
                 aktifFragment=fr;
                 }
+
                 return true;
+            }
+        });
+
+        BadgeDrawable badge=bnv.getOrCreateBadge(R.id.nav_duyuru);
+        badge.setBackgroundColor(getColor(R.color.red));
+        final Boolean[] badgecontroler = {false,false};
+        badge.setVisible(false);
+
+        db.child("users").child(user.getUid()).child("istek").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("111111111",snapshot.toString());
+                for (DataSnapshot s:snapshot.getChildren()){
+                    if(s.child("durum").getValue(Integer.class)==0){
+                        badgecontroler[0] =true;
+                    }
+
+                }
+
+                db.child("mesajlar").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snaps) {
+                        for (DataSnapshot sn:snaps.getChildren()){
+                            if(sn.child("kisiler").toString().contains(user.getUid())){
+                                sn.child("mesajlar").getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snap) {
+                                        for(DataSnapshot sa:snap.getChildren()){
+                                            if (!sa.child("gonderen").getValue(String.class).equals(user.getUid()) && !sa.child("okundu").getValue(Boolean.class)) {
+                                                badgecontroler[1] =true;
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                            }
+
+                        }
+                        if(badgecontroler[0] || badgecontroler[1]){
+                            badge.setVisible(true);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 
@@ -176,12 +236,14 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.homemenu, menu);
+
         return true;
     }
+
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
-
         if(item.getItemId()==R.id.cikis){
             auth.signOut();
             startActivity(new Intent(HomeActivity.this,LoginActivity.class));
@@ -202,7 +264,7 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Eğer çekmeçe açıksa, geri düğmesine basınca kapat
+        // Eğer çekmece açıksa, geri düğmesine basınca kapat
         if (drawerLayout.isDrawerOpen(nv)) {
             drawerLayout.closeDrawers();
         } else {
@@ -214,6 +276,8 @@ public class HomeActivity extends AppCompatActivity {
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users").child(userId);
         userRef.child("fcmToken").setValue(fcmToken);
     }
+
+
 
 
 }

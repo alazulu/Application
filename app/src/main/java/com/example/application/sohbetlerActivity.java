@@ -72,8 +72,7 @@ public class sohbetlerActivity extends AppCompatActivity {
                                public void onDataChange(@NonNull DataSnapshot snap) {
                                    adapter.clear();
                                    DbUser sUser=new DbUser();
-                                   sUser.setUserIsim(snap.child("ad").getValue(String.class));
-                                   sUser.setUserSoyisim(snap.child("soyad").getValue(String.class));
+                                   sUser.setUserIsim(snap.child("ad").getValue(String.class)+" "+snap.child("soyad").getValue(String.class));
                                    sUser.setUserImageurl(snap.child("image").getValue(String.class));
                                    sUser.setUserMail(i.getKey());
                                    sUser.setUseruserId(arkadas);
@@ -83,12 +82,15 @@ public class sohbetlerActivity extends AppCompatActivity {
                                        @Override
                                        public void onDataChange(@NonNull DataSnapshot s) {
                                            for (DataSnapshot sonmesaj:s.getChildren()){
+                                               Boolean okundu;
                                                sUser.setUserZaman(sonmesaj.child("timestamp").getValue(Long.class));
                                                sUser.setUserTel(sonmesaj.child("mesaj").getValue(String.class));
                                                if(sonmesaj.child("gonderen").getValue(String.class).equals(user.getUid())){
                                                    sUser.setUserIstek(1);
+                                                   sUser.setUserSoyisim("true");
                                                }else {
                                                    sUser.setUserIstek(0);
+                                                   sUser.setUserSoyisim(String.valueOf(sonmesaj.child("okundu").getValue(Boolean.class)));
                                                }
                                            }
                                            adapter.addsohbetItem(sUser);

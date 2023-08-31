@@ -69,7 +69,7 @@ public class sohbetAdapter extends RecyclerView.Adapter<sohbetAdapter.ViewHolder
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView sohbet_ad, sohbet_time,sohbet_last;
-        private ImageView sohbet_iv;
+        private ImageView sohbet_iv,ivreddot;
         private Button sohbet_btn;
         Context context;
 
@@ -79,6 +79,7 @@ public class sohbetAdapter extends RecyclerView.Adapter<sohbetAdapter.ViewHolder
             sohbet_btn = itemView.findViewById(R.id.btn_sohbet);
             sohbet_ad = itemView.findViewById(R.id.sohbet_ad);
             sohbet_iv = itemView.findViewById(R.id.iv_sohbet);
+            ivreddot=itemView.findViewById(R.id.ivreddot);
             sohbet_time = itemView.findViewById(R.id.sohbet_time);
             sohbet_last=itemView.findViewById(R.id.sohbet_last);
             context=itemView.getContext();
@@ -86,7 +87,7 @@ public class sohbetAdapter extends RecyclerView.Adapter<sohbetAdapter.ViewHolder
         }
 
         public void bind(DbUser sUser) {
-            sohbet_ad.setText(sUser.getUserIsim() + " " + sUser.getUserSoyisim());
+            sohbet_ad.setText(sUser.getUserIsim());
             String url = sUser.getUserImageurl();
             Context c = sohbet_iv.getContext();
             PicassoCache.getPicassoInstance(c).load(url).error(R.drawable.error).resize(200, 200).into(sohbet_iv);
@@ -96,9 +97,14 @@ public class sohbetAdapter extends RecyclerView.Adapter<sohbetAdapter.ViewHolder
                 String time=cm.simpledateformat(sUser.getUserZaman());
                 sohbet_time.setText(time);
             }else {
-                sohbet_last.setText("Siz: "+sUser.getUserTel());
+                sohbet_last.setText(context.getString(R.string.hitab) +sUser.getUserTel());
                 String time=cm.simpledateformat(sUser.getUserZaman());
                 sohbet_time.setText(time);
+            }
+            if (sUser.getUserSoyisim().equals("false")){
+                ivreddot.setVisibility(View.VISIBLE);
+            }else {
+                ivreddot.setVisibility(View.INVISIBLE);
             }
 
 

@@ -1,8 +1,5 @@
 package com.example.application;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -12,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,11 +18,11 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+
 import java.util.concurrent.TimeUnit;
 
 public class TelkayitActivity extends AppCompatActivity {
@@ -92,6 +91,8 @@ public class TelkayitActivity extends AppCompatActivity {
                     public void onVerificationFailed(@NonNull FirebaseException e) {
                         Log.e("hata", "Verification Error:" + e.getMessage());
                         Toast.makeText(TelkayitActivity.this, getString(R.string.toast30) + e.getMessage(), Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(TelkayitActivity.this, HomeActivity.class));
+                        finish();
 
                     }
 

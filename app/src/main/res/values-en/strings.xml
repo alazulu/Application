@@ -94,4 +94,10 @@
     <string name="toast38">Database Error: </string>
     <string name="toast39">Entry Message</string>
     <string name="mesaj">Message</string>
+    <string name="msj_git">Go to Message</string>
+    <string name="yeni_mesaj">You have a new message</string>
+    <string name="e_yok">No items to display</string>
+    <string name="toast40">Data unavailable. \nPlease check your connection!</string>
+    <string name="ttl">Start Chat</string>
+    <string name="hitab">You: </string>
 </resources>

@@ -98,6 +98,7 @@
     <string name="e_yok">Gösterilecek öğe yok</string>
     <string name="toast40">Verilere ulaşılamıyor. \nLütfen bağlantınızı kontrol edin!</string>
     <string name="ttl">Sohbete Başla</string>
+    <string name="hitab">Siz: </string>
 
 
 </resources>
